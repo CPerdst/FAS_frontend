@@ -1,15 +1,21 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello Vue 3.0 + Vite" />
+  <RouterView></RouterView>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Login from "./components/Login.vue";
+import Register from "./components/Register.vue";
+import IndexPage from "./components/IndexPage.vue";
+import {RouterView, RouterLink} from "vue-router";
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Login,
+    Register,
+    IndexPage,
+    RouterView,
+    RouterLink
   }
 }
 </script>
