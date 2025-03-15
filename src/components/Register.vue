@@ -25,10 +25,13 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submitForm" v-loading.fullscreen.lock="full_screen_loading">
-              注册
-            </el-button>
-            <el-button @click="resetForm">重置</el-button>
+              <el-button type="primary"
+                         @click="submitForm"
+                         v-loading.fullscreen.lock="full_screen_loading"
+                         size="small">
+                注 册
+              </el-button>
+              <el-button @click="resetForm" size="small">重 置</el-button>
           </el-form-item>
         </div>
 <!--        <el-form-item>-->
@@ -41,10 +44,9 @@
 <!--            <el-button type="danger" round @click="confirm" :disabled="cancle_disabled" style="width: 200%">清 空</el-button>-->
 <!--          </el-form-item>-->
 <!--        </div>-->
-<!--        <div id="forgot-pass" style="margin-right: -70px;">-->
-<!--          <a @click="jump1" style="margin-right: 5px;">忘记密码 ?</a>-->
-<!--          <a @click="jump2"  style="margin-left: 50px;">注册</a>-->
-<!--        </div>-->
+        <div id="forgot-pass" style="margin-right: -280px; margin-top: 40px">
+          <el-link :underline="false" @click="goToLogin"><el-icon><Back /></el-icon>返回登陆</el-link>
+        </div>
       </div>
 
     </el-form>
@@ -54,9 +56,13 @@
 </template>
 <script>
 import {ElLoading, ElMessage} from "element-plus";
+import {Back} from '@element-plus/icons-vue'
 
 export default {
   name: "Register",
+  components: {
+    Back
+  },
   data() {
     return {
       confirm_disabled: false,
@@ -98,6 +104,9 @@ export default {
         sex: 'man'
       }
       ElMessage.success("Reset Successfully!");
+    },
+    goToLogin() {
+      this.$router.push("/login");
     }
   }
 }
