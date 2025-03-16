@@ -20,14 +20,13 @@
           </el-form-item>
           <el-form-item label="性别" prop="sex" style="margin-top: 12px">
             <el-radio-group v-model="registerForm.sex">
-              <el-radio value="man">男</el-radio>
-              <el-radio value="woman">女</el-radio>
+              <el-radio v-bind:value=true>男</el-radio>
+              <el-radio v-bind:value=false>女</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item>
               <el-button type="primary"
                          @click="submitForm"
-                         v-loading.fullscreen.lock="full_screen_loading"
                          size="small">
                 注 册
               </el-button>
@@ -57,6 +56,7 @@
 <script>
 import {ElLoading, ElMessage} from "element-plus";
 import {Back} from '@element-plus/icons-vue'
+import axios from "axios";
 
 export default {
   name: "Register",
@@ -69,7 +69,7 @@ export default {
       registerForm: {
         username: '',
         password: '',
-        sex: 'man'
+        sex:true
       },
       rules: {
         username: [
@@ -80,28 +80,44 @@ export default {
           {required: true, message: '请输密码', trigger: 'blur'},
           {min: 8, max: 18, message: '密码长度在 8 到 18 个字符', trigger: 'blur'}
         ]
-      },
-      full_screen_loading: false
+      }
 
     }
   },
   methods: {
     confirm() {},
     submitForm() {
-      const loading = ElLoading.service({
-        lock: true,
-        text: '注册中，请等待',
-        background: 'rgba(0, 0, 0, 0.7)',
+      this.$refs.registerForm.validate(valid => {
+        if (valid) {
+          const registerLoading = ElLoading.service({
+            lock: true,
+            text: '注册中，请等待',
+            background: 'rgba(0, 0, 0, 0.7)',
+          })
+
+          axios.post(import.meta.env.VITE_BASE_URL + "/api/user/register"
+              , this.registerForm
+              , {
+                timeout: 3000,
+              }).then(response => {
+            registerLoading.close()
+            console.log(response)
+            if(response.status === 200 && response.data.code === 1) {
+              ElMessage.info(response.data.message)
+            }
+          }).catch(error => {
+            ElMessage.error("超时网络故障")
+            registerLoading.close()
+          })
+        }
       })
-      setTimeout(() => {
-        loading.close()
-      }, 2000)
+
     },
     resetForm() {
       this.registerForm = {
         username: '',
         password: '',
-        sex: 'man'
+        sex: true
       }
       ElMessage.success("Reset Successfully!");
     },
