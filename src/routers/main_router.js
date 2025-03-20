@@ -3,13 +3,50 @@ import Login from '../components/Login.vue'
 import Register from '../components/Register.vue'
 import Dashboard from '../components/Dashboard.vue'
 import {auth_store} from "../stores/auth_store";
+import MainPage from "../components/dashboard/MainPage.vue";
+import SampleUpload from "../components/dashboard/SampleUpload.vue";
+import ReportSummary from "../components/dashboard/ReportSummary.vue";
+import UserSettings from "../components/dashboard/UserSettings.vue";
+import Settings from "../components/dashboard/Settings.vue";
 
 const routes = [
     {
         path: '/dashboard',
         name: 'Dashboard',
         component: Dashboard,
-        meta: {requiresAuth: true},
+        meta: {requiresAuth: true, showFooter: true},
+        redirect: '/dashboard/main',
+        children: [
+            {
+                path: 'main',
+                name: 'Main',
+                component: MainPage
+            },
+            {
+                path: 'sampleUpload',
+                name: 'SampleUpload',
+                component: SampleUpload
+            },
+            {
+                path: 'reportSummary',
+                name: 'ReportSummary',
+                component: ReportSummary
+            },
+            {
+                path: 'userSettings',
+                name: 'UserSettings',
+                component: UserSettings
+            },
+            {
+                path: 'settings',
+                name: 'Settings',
+                component: Settings
+            },
+            // {
+            //     path: 'pathMatch(.*)*',
+            //     redirect: '/mainPage',
+            // }
+        ]
     },
     {
         path: "/login",

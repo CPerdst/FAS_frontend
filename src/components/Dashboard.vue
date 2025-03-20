@@ -50,23 +50,27 @@
         <el-menu
             :collapse="isCollapse"
             :collapse-transition="false"
-            router
+            :router="router"
             :default-active="$route.path"
             style="height: 100%; border-right: none;"
         >
-          <el-menu-item index="/dashboard">
+          <el-menu-item index="/dashboard/main">
             <el-icon><House /></el-icon>
             <template #title>主页</template>
           </el-menu-item>
-          <el-menu-item index="/patients">
+          <el-menu-item index="/dashboard/sampleUpload">
             <el-icon><User /></el-icon>
-            <template #title>患者管理</template>
+            <template #title>样本上传</template>
           </el-menu-item>
-          <el-menu-item index="/reports">
+          <el-menu-item index="/dashboard/reportSummary">
             <el-icon><Document /></el-icon>
             <template #title>报告查看</template>
           </el-menu-item>
-          <el-menu-item index="/settings">
+          <el-menu-item index="/dashboard/userSettings">
+            <el-icon><Setting /></el-icon>
+            <template #title>用户设置</template>
+          </el-menu-item>
+          <el-menu-item index="/dashboard/settings">
             <el-icon><Setting /></el-icon>
             <template #title>系统设置</template>
           </el-menu-item>
@@ -94,7 +98,6 @@ import {
   Expand
 } from '@element-plus/icons-vue';
 import { auth_store } from '../stores/auth_store';
-import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 
 export default {
@@ -112,7 +115,8 @@ export default {
     return {
       userAvatar: "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
       authStore: auth_store(),
-      isCollapse: false // 控制侧边栏展开状态
+      isCollapse: false, // 控制侧边栏展开状态,
+      router: true
     };
   },
   methods: {
