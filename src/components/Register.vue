@@ -57,6 +57,7 @@
 import {ElLoading, ElMessage} from "element-plus";
 import {Back} from '@element-plus/icons-vue'
 import axios from "axios";
+import apiClient from "../utils/asiox_instance";
 
 export default {
   name: "Register",
@@ -96,7 +97,7 @@ export default {
           })
           // 开始注册
           try{
-            const response = await axios.post(import.meta.env.VITE_BASE_URL + "/api/user/register"
+            const response = await apiClient.post(import.meta.env.VITE_BASE_URL + "/api/user/register"
                 , this.registerForm
                 , {timeout: 3000});
             // 先关闭加载页面

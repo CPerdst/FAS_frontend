@@ -24,7 +24,7 @@
         <div class="user-info">
           <el-dropdown @command="handleDropdownCommand">
             <span class="user-info-trigger">
-              <el-avatar :size="30" :src="authStore.user?.awatar || userAvatar" />
+              <el-avatar :size="30" :src="authStore.user?.avatar || userAvatar" />
               <span>{{ authStore.user?.username || "null" }}</span>
               <el-icon class="arrow-icon">
                 <ArrowDown />

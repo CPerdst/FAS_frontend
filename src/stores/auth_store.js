@@ -1,6 +1,7 @@
 import {createPinia, defineStore} from "pinia";
 import axios from "axios";
 import {ElMessage} from "element-plus";
+import apiClient from "../utils/asiox_instance";
 
 export const auth_store = defineStore("auth_store", {
     state: () => ({
@@ -19,8 +20,8 @@ export const auth_store = defineStore("auth_store", {
         async login(username, password) {
             try{
                 // 使用async/await来更清晰的处理代码
-                const response = await axios.post(
-                    import.meta.env.VITE_BASE_URL + "/api/user/login",
+                const response = await apiClient.post(
+                    "/api/user/login",
                     {username, password},
                     {
                         timeout: 3000
