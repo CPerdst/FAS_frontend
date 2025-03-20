@@ -5,7 +5,7 @@
 <script>
 import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
-import IndexPage from "./components/IndexPage.vue";
+import Dashboard from "./components/Dashboard.vue";
 import {RouterView, RouterLink} from "vue-router";
 
 export default {
@@ -13,7 +13,7 @@ export default {
   components: {
     Login,
     Register,
-    IndexPage,
+    IndexPage: Dashboard,
     RouterView,
     RouterLink
   }

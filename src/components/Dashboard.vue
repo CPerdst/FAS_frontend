@@ -1,11 +1,11 @@
 <script>
 export default {
-  name: "Index"
+  name: "Dashboard",
 }
 </script>
 
 <template>
-  Index
+  Dashboard
 </template>
 
 <style scoped>
