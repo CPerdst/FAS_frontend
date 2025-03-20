@@ -17,6 +17,10 @@ const routes = [
         meta: {requiresAuth: true, showFooter: true},
         redirect: '/dashboard/main',
         children: [
+            {   // 空路径表示默认路由
+                path: '',
+                redirect: '/dashboard/main',
+            },
             {
                 path: 'main',
                 name: 'Main',
