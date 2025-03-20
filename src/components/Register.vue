@@ -74,11 +74,11 @@ export default {
       rules: {
         username: [
           {required: true, message: '请输入账号', trigger: 'blur'},
-          {min: 3, max: 6, message: '用户名长度在 3 到 6 个字符', trigger: 'blur'}
+          {min: 1, max: 20, message: '用户名长度在 20 个字符以内', trigger: 'blur'}
         ],
         password: [
           {required: true, message: '请输密码', trigger: 'blur'},
-          {min: 8, max: 18, message: '密码长度在 8 到 18 个字符', trigger: 'blur'}
+          {min: 1, max: 32, message: '密码长度在 32 个字符以内', trigger: 'blur'}
         ]
       }
 
@@ -87,28 +87,37 @@ export default {
   methods: {
     confirm() {},
     submitForm() {
-      this.$refs.registerForm.validate(valid => {
+      this.$refs.registerForm.validate(async (valid) => {
         if (valid) {
           const registerLoading = ElLoading.service({
             lock: true,
             text: '注册中，请等待',
             background: 'rgba(0, 0, 0, 0.7)',
           })
+          // 开始注册
+          try{
+            const response = await axios.post(import.meta.env.VITE_BASE_URL + "/api/user/register"
+                , this.registerForm
+                , {timeout: 3000});
+            // 先关闭加载页面
+            registerLoading.close();
 
-          axios.post(import.meta.env.VITE_BASE_URL + "/api/user/register"
-              , this.registerForm
-              , {
-                timeout: 3000,
-              }).then(response => {
-            registerLoading.close()
-            console.log(response)
-            if(response.status === 200 && response.data.code === 1) {
-              ElMessage.info(response.data.message)
+            // 判断注册结果
+            if(response.data.code === 200){
+              ElMessage.success('注册成功');
+              this.goToLogin();
+            }else {
+              ElMessage.error('注册失败')
             }
-          }).catch(error => {
-            ElMessage.error("超时网络故障")
-            registerLoading.close()
-          })
+          }catch(error){
+            registerLoading.close();
+            // 根据错误类型显示提示
+            if (axios.isAxiosError(error) && error.code === 'ECONNABORTED') {
+              ElMessage.error('网络请求超时');
+            } else {
+              ElMessage.error('注册失败: ' + (error.response?.data?.message || '未知错误'));
+            }
+          }
         }
       })
 

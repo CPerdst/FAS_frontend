@@ -27,7 +27,7 @@
         </div>
         <div id="submit-button-cvr" style="margin-top: 40px;margin-left: -120px">
           <el-form-item>
-            <el-button type="danger" round @click="confirm" :disabled="confirm_disabled" style="width: 200%">登 录</el-button>
+            <el-button type="danger" @click="confirm" style="width: 200%">登 录</el-button>
           </el-form-item>
         </div>
         <div id="forgot-pass" style="margin-right: -75px;">
@@ -42,11 +42,14 @@
 
 </template>
 <script>
+import {ElLoading, ElMessage} from "element-plus";
+import axios from "axios";
+import {auth_store} from "../stores/auth_store";
+
 export default {
   name: "MedLogin",
   data() {
     return {
-      confirm_disabled: false,
       loginForm: {
         no: '',
         password: ''
@@ -54,11 +57,11 @@ export default {
       rules: {
         no: [
           {required: true, message: '请输入账号', trigger: 'blur'},
-          {min: 3, max: 6, message: '用户名长度在 3 到 6 个字符', trigger: 'blur'}
+          {min: 1, max: 20, message: '用户名长度在 20 个字符以内', trigger: 'blur'}
         ],
         password: [
           {required: true, message: '请输密码', trigger: 'blur'},
-          {min: 3, max: 6, message: '密码长度在 3 到 6 个字符', trigger: 'blur'}
+          {min: 1, max: 32, message: '密码长度在 32 个字符以内', trigger: 'blur'}
         ]
       }
 
@@ -66,6 +69,38 @@ export default {
   },
   methods: {
     confirm() {
+      this.$refs.loginForm.validate(async (valid) => {
+        if (valid) {
+          const auth = auth_store()
+          const loginLoading = ElLoading.service({
+            lock: true,
+            text: '登录，请等待',
+            background: 'rgba(0, 0, 0, 0.7)',
+          })
+
+          // 执行用户登录操作
+          try{
+            const response = await auth.login(this.loginForm.no, this.loginForm.password);
+            // 不管怎么样，先关闭加载页面
+            loginLoading.close();
+            // 判断结果
+            if(response.data.code === 200) {
+              ElMessage.success('登录成功')
+              this.$router.push('/dashboard')
+            }else {
+              ElMessage.error('登录失败')
+            }
+          } catch(error){
+            loginLoading.close();
+            // 根据错误类型显示提示
+            if (axios.isAxiosError(error) && error.code === 'ECONNABORTED') {
+              ElMessage.error('网络请求超时');
+            } else {
+              ElMessage.error('登录失败: ' + (error.response?.data?.message || '未知错误'));
+            }
+          }
+        }
+      })
     },
     jump2() {
       console.log(this.$router.push("/register"));
