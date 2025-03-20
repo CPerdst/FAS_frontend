@@ -5,9 +5,11 @@ import {ElMessage} from "element-plus";
 export const auth_store = defineStore("auth_store", {
     state: () => ({
         user: null,
-        token: localStorage.getItem("jwtToken") || null,
-        redirectPath: null
+        // token: localStorage.getItem("jwtToken") || null,
+        token: null,
+        redirectPath: null,
     }),
+    persist: true,
     getters: {
         getUserInfo: state => state.user,
         getToken: state => state.token,
@@ -39,7 +41,7 @@ export const auth_store = defineStore("auth_store", {
                 })
                 // this.user = response.data.data.user;
                 // this.token = response.data.data.token;
-                localStorage.setItem("jwtToken", response.data.data.token);
+                // localStorage.setItem("jwtToken", response.data.data.token);
 
                 // 返回成功的数据
                 return response;
@@ -48,12 +50,10 @@ export const auth_store = defineStore("auth_store", {
             }
         },
 
-        logout: () => {
+        logout() {
             localStorage.removeItem("jwtToken");
-            this.$patch({
-                token: null,
-                user: null,
-            })
+            this.token = null;
+            this.user = null;
         },
 
         goToLogin() {
