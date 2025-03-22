@@ -1,6 +1,6 @@
 <template>
   <RouterView></RouterView>
-  <Footer v-if="$route.meta.showFooter" />
+<!--  <Footer v-if="$route.meta.showFooter" />-->
 </template>
 
 <script>

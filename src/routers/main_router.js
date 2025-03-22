@@ -141,4 +141,4 @@ router.afterEach((to, from) => {
     }
 });
 
-export default router
+export default router;

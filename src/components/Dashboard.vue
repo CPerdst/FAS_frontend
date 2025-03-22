@@ -119,6 +119,11 @@ export default {
       router: true
     };
   },
+  computed: {
+    user() {
+      return this.authStore.user;
+    }
+  },
   methods: {
     // 切换侧边栏展开状态
     toggleCollapse() {
@@ -153,7 +158,6 @@ export default {
 }
 
 .header {
-  padding: 0;
   display: flex;
   align-items: center;
   padding: 0 20px;
@@ -199,18 +203,8 @@ export default {
 }
 
 /* 侧边栏样式（使用深度选择器穿透） */
-::v-deep .el-menu--collapse .el-menu-item span {
+.el-menu--collapse .el-menu-item span {
   display: none !important; /* 隐藏折叠时的文字 */
-}
-
-.el-aside {
-  transition: width 0.3s ease;
-}
-
-/* 内容区域样式 */
-.el-main {
-  padding: 20px;
-  background-color: #eef2f7;
 }
 
 /* 头像和按钮样式 */

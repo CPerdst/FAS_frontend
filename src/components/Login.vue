@@ -90,6 +90,8 @@ export default {
               this.$router.push(this.$router.currentRoute.value.query?.redirect || '/dashboard');
             }else {
               ElMessage.error('登录失败')
+              // 清理输入框
+              this.$refs.loginForm.resetFields(['password']);
             }
           } catch(error){
             loginLoading.close();
