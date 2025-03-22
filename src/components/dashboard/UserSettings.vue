@@ -72,11 +72,12 @@
       <el-breadcrumb-item>用户设置</el-breadcrumb-item>
     </el-breadcrumb>
 
+    <!--          :action="avatarUploadUrl"-->
     <!-- 头像上传容器 -->
     <div class="avatar-upload">
       <el-upload
           class="upload-demo"
-          :action="avatarUploadUrl"
+          :http-request="uploadAvatar"
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload"
           :headers="uploadHeaders"
@@ -376,6 +377,29 @@ export default {
           ElMessage.error("发生未知错误，请重试");
         }
       }
+    },
+
+    // 上传头像
+    async uploadAvatar({ file }) {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await apiClient.post(
+            this.avatarUploadUrl,
+            formData,
+            {
+              timeout: 5000
+            }
+        );
+
+        await this.handleAvatarSuccess(response.data);
+
+        return response;
+      }catch(error) {
+
+      }
+
     }
   },
   created() {
