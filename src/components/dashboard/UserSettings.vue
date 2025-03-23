@@ -159,6 +159,7 @@ import { Plus } from '@element-plus/icons-vue';
 import apiClient from "../../utils/asiox_instance";
 import axios from "axios";
 import Footer from "../Footer.vue";
+import {long_timeout, middle_timeout} from "../../utils/constant";
 
 export default {
   components: {
@@ -389,7 +390,7 @@ export default {
             this.avatarUploadUrl,
             formData,
             {
-              timeout: 5000
+              timeout: long_timeout
             }
         );
 

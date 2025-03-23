@@ -58,6 +58,7 @@ import {ElLoading, ElMessage} from "element-plus";
 import {Back} from '@element-plus/icons-vue'
 import axios from "axios";
 import apiClient from "../utils/asiox_instance";
+import {fast_timeout, long_timeout, middle_timeout} from "../utils/constant";
 
 export default {
   name: "Register",
@@ -99,7 +100,7 @@ export default {
           try{
             const response = await apiClient.post(import.meta.env.VITE_BASE_URL + "/api/user/register"
                 , this.registerForm
-                , {timeout: 3000});
+                , {timeout: middle_timeout});
             // 先关闭加载页面
             registerLoading.close();
 

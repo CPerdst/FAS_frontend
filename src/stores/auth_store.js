@@ -2,6 +2,7 @@ import {createPinia, defineStore} from "pinia";
 import axios from "axios";
 import {ElMessage} from "element-plus";
 import apiClient from "../utils/asiox_instance";
+import {long_timeout, middle_timeout} from "../utils/constant";
 
 export const auth_store = defineStore("auth_store", {
     state: () => ({
@@ -24,7 +25,7 @@ export const auth_store = defineStore("auth_store", {
                 "/api/user/login",
                 {username, password},
                 {
-                    timeout: 3000
+                    timeout: middle_timeout,
                 }
             )
 
@@ -67,7 +68,7 @@ export const auth_store = defineStore("auth_store", {
 
             // 发送更新请求
             const response = await apiClient.post("/api/user/update", data, {
-                timeout: 3000,
+                timeout: middle_timeout,
             });
 
             return response?.data || null; // 返回后端数据
