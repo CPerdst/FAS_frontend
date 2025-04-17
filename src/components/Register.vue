@@ -104,12 +104,14 @@ export default {
             // 先关闭加载页面
             registerLoading.close();
 
+            console.log(response.data.message);
+            const code = response.data.code;
             // 判断注册结果
-            if(response.data.code === 200){
+            if(code === 0){
               ElMessage.success('注册成功');
               this.goToLogin();
             }else {
-              ElMessage.error('注册失败')
+              ElMessage.error('注册失败: ' + response.data.message);
             }
           }catch(error){
             registerLoading.close();

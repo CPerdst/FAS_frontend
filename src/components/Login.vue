@@ -84,7 +84,7 @@ export default {
             // 不管怎么样，先关闭加载页面
             loginLoading.close();
             // 判断结果
-            if(response.data.code === 200) {
+            if(response.data.code === 0) {
               ElMessage.success('登录成功')
               // 获取路由守卫设置的redirect重定位参数，并进行重定位
               this.$router.push(this.$router.currentRoute.value.query?.redirect || '/dashboard');

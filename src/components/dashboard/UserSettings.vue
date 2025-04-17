@@ -286,7 +286,7 @@ export default {
 
     // 头像上传成功处理
     async handleAvatarSuccess(response, uploadFile) {
-      if(response.code === 200){
+      if(response.code === 0){
         ElMessage.success('头像上传成功');
         // 直接获取 response 中的 data(avatar url)
         // 更新 Store 和组件中的头像信息
@@ -341,7 +341,7 @@ export default {
         // 调用 Store 的 updateUser 方法
         const data = await this.authStore.updateUser(this.userForm);
 
-        if(data === null || data.code !== 200) {
+        if(data === null || data.code !== 0) {
           ElMessage.error(data?.message || "未知错误");
           return;
         }
