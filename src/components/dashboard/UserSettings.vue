@@ -319,6 +319,8 @@ export default {
 
     // 点击保存时弹窗确认
     async confirmSubmit() {
+      console.log(auth_store().user);
+      auth_store().logout();
       try {
         // 表单验证
         const valid = await this.$refs.userForm.validate();

@@ -45,6 +45,7 @@
 import {ElLoading, ElMessage} from "element-plus";
 import axios from "axios";
 import {auth_store} from "../stores/auth_store";
+import apiClient from "../utils/asiox_instance";
 
 export default {
   name: "MedLogin",
@@ -63,8 +64,23 @@ export default {
           {required: true, message: '请输密码', trigger: 'blur'},
           {min: 1, max: 32, message: '密码长度在 32 个字符以内', trigger: 'blur'}
         ]
-      }
-
+      },
+      authStore: null
+    }
+  },
+  setup() {
+    const auth = auth_store();
+    return {
+      user: auth.user,
+      token: auth.token
+    };
+  },
+  computed: {
+    user() {
+      return this.authStore.user;
+    },
+    token() {
+      return this.authStore.token;
     }
   },
   methods: {
@@ -74,34 +90,63 @@ export default {
           const auth = auth_store()
           const loginLoading = ElLoading.service({
             lock: true,
-            text: '登录，请等待',
+            text: '登录中，请等待...',
             background: 'rgba(0, 0, 0, 0.7)',
           })
 
-          // 执行用户登录操作
-          try{
-            const response = await auth.login(this.loginForm.no, this.loginForm.password);
-            // 不管怎么样，先关闭加载页面
-            loginLoading.close();
-            // 判断结果
-            if(response.data.code === 0) {
-              ElMessage.success('登录成功')
-              // 获取路由守卫设置的redirect重定位参数，并进行重定位
-              this.$router.push(this.$router.currentRoute.value.query?.redirect || '/dashboard');
-            }else {
-              ElMessage.error('登录失败')
-              // 清理输入框
-              this.$refs.loginForm.resetFields(['password']);
-            }
-          } catch(error){
-            loginLoading.close();
-            // 根据错误类型显示提示
-            if (axios.isAxiosError(error) && error.code === 'ECONNABORTED') {
-              ElMessage.error('网络请求超时');
-            } else {
-              ElMessage.error('登录失败: ' + (error.response?.data?.message || '未知错误'));
-            }
+          const loginApiUrl = "/api/user/login";
+          const response = await apiClient(
+              loginApiUrl,
+              {
+                data: {
+                  username: this.loginForm.no,
+                  password: this.loginForm.password
+                },
+                method: 'post',
+              },
+              {
+                timeout: 5000,
+              }
+          );
+          loginLoading.close();
+
+          if(response.data.code !== 0) {
+            this.$refs.loginForm.resetFields(['password']);
+            console.error("登录失败: ", JSON.stringify(response.data, null, 2));
+            ElMessage.error('登录失败: ' + response.data.message)
+            return;
           }
+
+          // 登录成功
+          console.log("登录成功: " + JSON.stringify(response.data, null, 2));
+          // 跳转到首页
+          this.$router.push(this.$router.currentRoute.value.query?.redirect || '/dashboard');
+
+
+          // 执行用户登录操作
+          // try{
+          //   const response = await auth.login(this.loginForm.no, this.loginForm.password);
+          //   // 不管怎么样，先关闭加载页面
+          //   loginLoading.close();
+          //   // 判断结果
+          //   if(response.data.code === 0) {
+          //     ElMessage.success('登录成功')
+          //     // 获取路由守卫设置的redirect重定位参数，并进行重定位
+          //     this.$router.push(this.$router.currentRoute.value.query?.redirect || '/dashboard');
+          //   }else {
+          //     ElMessage.error('登录失败')
+          //     // 清理输入框
+          //     this.$refs.loginForm.resetFields(['password']);
+          //   }
+          // } catch(error){
+          //   loginLoading.close();
+          //   // 根据错误类型显示提示
+          //   if (axios.isAxiosError(error) && error.code === 'ECONNABORTED') {
+          //     ElMessage.error('网络请求超时');
+          //   } else {
+          //     ElMessage.error('登录失败: ' + (error.response?.data?.message || '未知错误'));
+          //   }
+          // }
         }
       })
     },

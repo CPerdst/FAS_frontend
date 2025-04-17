@@ -105,8 +105,8 @@ router.beforeEach(async (to, from, next) => {
 
     // 如果页面需要登录
     if(to.matched.some(record => record.meta.requiresAuth)){
-        console.log(to);
-        console.log(from);
+        // console.log(to);
+        // console.log(from);
         // console.log(next);
         // console.log(auth.token);
         // console.log(auth.isLoggedIn);
