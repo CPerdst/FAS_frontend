@@ -68,12 +68,8 @@ export default {
       authStore: null
     }
   },
-  setup() {
-    const auth = auth_store();
-    return {
-      user: auth.user,
-      token: auth.token
-    };
+  created() {
+    this.authStore = auth_store();
   },
   computed: {
     user() {
@@ -114,14 +110,19 @@ export default {
             this.$refs.loginForm.resetFields(['password']);
             console.error("登录失败: ", JSON.stringify(response.data, null, 2));
             ElMessage.error('登录失败: ' + response.data.message)
+            this.$refs.loginForm.resetFields(['password']);
             return;
           }
 
           // 登录成功
           console.log("登录成功: " + JSON.stringify(response.data, null, 2));
+          // 首先将用户的数据存入authStore中
+          this.authStore.$patch({
+            user: response.data.data.user,
+            token: response.data.data.token,
+          })
           // 跳转到首页
           this.$router.push(this.$router.currentRoute.value.query?.redirect || '/dashboard');
-
 
           // 执行用户登录操作
           // try{

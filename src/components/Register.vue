@@ -97,30 +97,21 @@ export default {
             background: 'rgba(0, 0, 0, 0.7)',
           })
           // 开始注册
-          try{
-            const response = await apiClient.post(import.meta.env.VITE_BASE_URL + "/api/user/register"
-                , this.registerForm
-                , {timeout: middle_timeout});
-            // 先关闭加载页面
-            registerLoading.close();
+          const response = await apiClient.post(import.meta.env.VITE_BASE_URL + "/api/user/register"
+              , this.registerForm
+              , {timeout: middle_timeout});
+          // 先关闭加载页面
+          registerLoading.close();
 
-            console.log(response.data.message);
-            const code = response.data.code;
-            // 判断注册结果
-            if(code === 0){
-              ElMessage.success('注册成功');
-              this.goToLogin();
-            }else {
-              ElMessage.error('注册失败: ' + response.data.message);
-            }
-          }catch(error){
-            registerLoading.close();
-            // 根据错误类型显示提示
-            if (axios.isAxiosError(error) && error.code === 'ECONNABORTED') {
-              ElMessage.error('网络请求超时');
-            } else {
-              ElMessage.error('注册失败: ' + (error.response?.data?.message || '未知错误'));
-            }
+          const code = response.data.code;
+          // 判断注册结果
+          if(code === 0){
+            console.log("注册成功: " + JSON.stringify(response.data, null, 2));
+            ElMessage.success('注册成功');
+            this.goToLogin();
+          }else {
+            console.log("注册失败: ", JSON.stringify(response.data, null, 2));
+            ElMessage.error('注册失败: ' + response.data.message);
           }
         }
       })

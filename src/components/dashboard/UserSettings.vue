@@ -319,11 +319,13 @@ export default {
 
     // 点击保存时弹窗确认
     async confirmSubmit() {
-      console.log(auth_store().user);
-      auth_store().logout();
       try {
         // 表单验证
-        const valid = await this.$refs.userForm.validate();
+        const valid = await this.$refs.userForm.validate(async (valid) => {
+          if(valid) {
+            return true;
+          }
+        });
         if (!valid) {
           console.log("表单验证失败");
           throw new Error("表单验证失败");
@@ -341,10 +343,24 @@ export default {
         );
 
         // 调用 Store 的 updateUser 方法
-        const data = await this.authStore.updateUser(this.userForm);
+        const UPDATE_USER_URL = import.meta.env.VITE_BASE_URL + '/api/user/update';
+        const response = await apiClient({
+          url: UPDATE_USER_URL,
+          method: 'POST',
+          data: {
+            username: this.userForm.username,
+            oldPassword: this.userForm.oldPassword,
+            newPassword: this.userForm.password,
+            sex: this.userForm.sex,
+          },
+          config: {
+            timeout: long_timeout
+          }
+        });
 
-        if(data === null || data.code !== 0) {
-          ElMessage.error(data?.message || "未知错误");
+        if(response === null || response.data.code !== 0) {
+          console.error("更新用户信息失败: ", JSON.stringify(response.data, null, 2));
+          ElMessage.error('更新用户信息失败: ' + response.data.message)
           return;
         }
 
