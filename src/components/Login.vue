@@ -123,31 +123,6 @@ export default {
           })
           // 跳转到首页
           this.$router.push(this.$router.currentRoute.value.query?.redirect || '/dashboard');
-
-          // 执行用户登录操作
-          // try{
-          //   const response = await auth.login(this.loginForm.no, this.loginForm.password);
-          //   // 不管怎么样，先关闭加载页面
-          //   loginLoading.close();
-          //   // 判断结果
-          //   if(response.data.code === 0) {
-          //     ElMessage.success('登录成功')
-          //     // 获取路由守卫设置的redirect重定位参数，并进行重定位
-          //     this.$router.push(this.$router.currentRoute.value.query?.redirect || '/dashboard');
-          //   }else {
-          //     ElMessage.error('登录失败')
-          //     // 清理输入框
-          //     this.$refs.loginForm.resetFields(['password']);
-          //   }
-          // } catch(error){
-          //   loginLoading.close();
-          //   // 根据错误类型显示提示
-          //   if (axios.isAxiosError(error) && error.code === 'ECONNABORTED') {
-          //     ElMessage.error('网络请求超时');
-          //   } else {
-          //     ElMessage.error('登录失败: ' + (error.response?.data?.message || '未知错误'));
-          //   }
-          // }
         }
       })
     },
