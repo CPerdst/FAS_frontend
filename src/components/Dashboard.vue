@@ -150,65 +150,6 @@ export default {
 };
 </script>
 
-<style scoped>
-.dashboard-container {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.header {
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-}
-
-.header-content {
-  display: flex;
-  align-items: center;
-  height: 100%;
-  width: 100%; /* 显式设置宽度 */
-}
-
-.collapse-btn {
-  background: transparent;
-  border: none;
-  color: white;
-  padding: 0 15px;
-  cursor: pointer;
-  margin-right: 20px; /* 折叠按钮与系统名称间距 */
-}
-
-.system-name {
-  margin-left: 20px; /* 与折叠按钮间隔 */
-  margin-right: auto; /* 推用户信息到右侧 */
-  color: white;
-  font-size: 20px;
-}
-
-.user-info {
-  margin-right: 20px; /* 右边距 */
-}
-
-.user-info-trigger {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-}
-
-.user-info-trigger span {
-  font-size: 14px;
-  color: white;
-}
-
-/* 侧边栏样式（使用深度选择器穿透） */
-.el-menu--collapse .el-menu-item span {
-  display: none !important; /* 隐藏折叠时的文字 */
-}
-
-/* 头像和按钮样式 */
-.arrow-icon {
-  margin-left: 5px;
-}
+<style lang="scss" scoped>
+@use '../assets/css/dashboard';
 </style>

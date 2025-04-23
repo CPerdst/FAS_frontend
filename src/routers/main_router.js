@@ -2,6 +2,7 @@ import {createRouter, createMemoryHistory, createWebHistory} from 'vue-router'
 import Login from '../components/Login.vue'
 import Register from '../components/Register.vue'
 import Dashboard from '../components/Dashboard.vue'
+import Dashboard2 from "../page/Dashboard.vue"
 import {auth_store} from "../stores/auth_store";
 import MainPage from "../components/dashboard/MainPage.vue";
 import SampleUpload from "../components/dashboard/SampleUpload.vue";
@@ -9,7 +10,7 @@ import ReportSummary from "../components/dashboard/ReportSummary.vue";
 import UserSettings from "../components/dashboard/UserSettings.vue";
 import Settings from "../components/dashboard/Settings.vue";
 
-const routes = [
+const oldRoutes = [
     {
         path: '/dashboard',
         name: 'Dashboard',
@@ -67,6 +68,19 @@ const routes = [
     {
         path: '/',
         redirect: '/dashboard',
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        redirect: '/dashboard',
+        meta: {guestOnly: true},
+    }
+]
+
+const routes = [
+    {
+        path: '/dashboard',
+        name: 'dashboard',
+        component: Dashboard2
     },
     {
         path: '/:pathMatch(.*)*',
