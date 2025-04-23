@@ -1,4 +1,11 @@
-import {CircleClose, Setting} from '@element-plus/icons-vue'
+import {
+    CircleClose,
+    Setting,
+    Upload,
+    House,
+    MostlyCloudy,
+    Document
+} from '@element-plus/icons-vue'
 
 export const fast_timeout = 3000 // 三秒
 export const middle_timeout = 5000 // 五秒
@@ -75,24 +82,24 @@ export const panelMenu = [
         name: 'main',
         title: '首页',
         path: MAIN_PANEL_URL,
-        icon: 'home',
+        icon: House,
     },
     {
         name: 'virusDetect',
         title: '查杀',
-        icon: 'virus',
+        icon: MostlyCloudy,
         submenu: [
             {
                 name: 'sampleUpload',
                 title: '样本上传',
                 path: SAMPLE_UPLOAD_PANEL_URL,
-                icon: 'upload'
+                icon: Upload
             },
             {
                 name: 'reportView',
                 title: '报告查看',
                 path: SAMPLE_REPORT_VIEWING_PANEL_URL,
-                icon: 'report'
+                icon: Document
             }
         ]
     }

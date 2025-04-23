@@ -80,7 +80,44 @@ const routes = [
     {
         path: '/dashboard',
         name: 'dashboard',
-        component: Dashboard2
+        component: Dashboard2,
+        children: [
+            {
+                path: '',
+                redirect: '/dashboard/main',
+            },
+            {
+                path: 'main',
+                name: 'main',
+                component: MainPage,
+                meta: {requiresAuth: true},
+            },
+            {
+                path: 'sampleUpload',
+                name: 'sampleUpload',
+                component: SampleUpload,
+                meta: {requiresAuth: true},
+            },
+            {
+                path: 'reportSummary',
+                name: 'reportSummary',
+                component: ReportSummary,
+                meta: {requiresAuth: true},
+            },
+            {
+                path: 'userSettings',
+                name: 'userSettings',
+                component: UserSettings,
+                meta: {requiresAuth: true},
+            },
+            {
+                path: 'login',
+                name: 'login',
+                component: Login,
+                meta: {guestOnly: true},
+            }
+        ],
+        meta: {requiresAuth: false}
     },
     {
         path: '/:pathMatch(.*)*',
@@ -119,8 +156,8 @@ router.beforeEach(async (to, from, next) => {
 
     // 如果页面需要登录
     if(to.matched.some(record => record.meta.requiresAuth)){
-        console.log(JSON.stringify(to, null, 2));
-        console.log(JSON.stringify(from, null, 2));
+        // console.log(JSON.stringify(to, null, 2));
+        // console.log(JSON.stringify(from, null, 2));
         // console.log(next);
         // console.log(auth.token);
         // console.log(auth.isLoggedIn);
@@ -128,10 +165,10 @@ router.beforeEach(async (to, from, next) => {
         if(!auth.isLoggedIn) {
             // 跳转到登陆页面
             next({
-                path: '/login',
+                path: '/dashboard/login',
                 query: { redirect: to.fullPath }
             });
-        }else {
+        } else {
             // 正常跳转
             next();
         }

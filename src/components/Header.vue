@@ -25,7 +25,7 @@ const props = defineProps({
   user: {
     type: Object,
     default: () => ({
-      name: '未登录',
+      username: '未登录',
       avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
     })
   },
@@ -56,7 +56,7 @@ function handleDropdownCommand(command) {
       <el-dropdown @command="handleDropdownCommand">
         <span class="user-info-trigger">
           <el-avatar :size="40" :src="props.user.avatar" :shape="props.avatar_shape"/>
-          <span>{{ props.user.name }}</span>
+          <span>{{ props.user.username }}</span>
           <el-icon class="arrow-icon">
             <ArrowDown />
           </el-icon>
