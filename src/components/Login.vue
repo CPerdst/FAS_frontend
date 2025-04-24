@@ -1,51 +1,8 @@
-<template>
-  <div class="shell">
-
-    <div id="img-box" style="margin-top: 50px;transform: scale(1.1);">
-      <img src="../assets/loginBackground.jpg" alt="">
-    </div>
-
-    <el-form :model="loginForm" label-width="100px"
-             :rules="rules" ref="loginForm" style="margin-top: 50px;transform: scale(1.1);">
-      <div id="form-body">
-        <div id="welcome-lines" style="margin-top: -40px; margin-right: -50px;">
-          <div id="w-line-1">你好! </div>
-          <div id="w-line-2">欢迎回来</div>
-        </div>
-
-        <div id="input-area" style="margin-right: 50px; transform: scale(1.5); ">
-
-          <el-form-item label="账号" prop="no" >
-            <el-input style="width: 200px " type="text" v-model="loginForm.no"
-                      autocomplete="off" size="small"></el-input>
-          </el-form-item>
-          <el-form-item label="密码" prop="password" style="margin-top: 12px">
-            <el-input style="width: 200px" type="password" v-model="loginForm.password"
-                      show-password autocomplete="off" size="small" @keyup.enter.native="confirm"></el-input>
-          </el-form-item>
-
-        </div>
-        <div id="submit-button-cvr" style="margin-top: 40px;margin-left: -120px">
-          <el-form-item>
-            <el-button type="danger" @click="confirm" style="width: 200%">登 录</el-button>
-          </el-form-item>
-        </div>
-        <div id="forgot-pass" style="margin-right: -75px;">
-          <a @click="jump1" style="margin-right: 5px;">忘记密码 ?</a>
-          <a @click="jump2"  style="margin-left: 50px;">注册</a>
-        </div>
-      </div>
-
-    </el-form>
-
-  </div>
-
-</template>
 <script>
 import {ElLoading, ElMessage} from "element-plus";
-import axios from "axios";
 import {auth_store} from "../stores/auth_store";
 import apiClient from "../utils/asiox_instance";
+import {ref} from "vue";
 
 export default {
   name: "MedLogin",
@@ -81,6 +38,7 @@ export default {
   },
   methods: {
     confirm() {
+
       this.$refs.loginForm.validate(async (valid) => {
         if (valid) {
           const auth = auth_store()
@@ -129,6 +87,51 @@ export default {
   }
 }
 </script>
+
+<template>
+  <div class="shell">
+
+    <div id="img-box" style="margin-top: 50px;transform: scale(1.1);">
+      <img src="../assets/loginBackground.jpg" alt="">
+    </div>
+
+    <el-form :model="loginForm" label-width="100px"
+             :rules="rules" ref="loginForm" style="margin-top: 50px;transform: scale(1.1);">
+      <div id="form-body">
+        <div id="welcome-lines" style="margin-top: -40px; margin-right: -50px;">
+          <div id="w-line-1">你好! </div>
+          <div id="w-line-2">欢迎回来</div>
+        </div>
+
+        <div id="input-area" style="margin-right: 50px; transform: scale(1.5); ">
+
+          <el-form-item label="账号" prop="no" >
+            <el-input style="width: 200px " type="text" v-model="loginForm.no"
+                      autocomplete="off" size="small"></el-input>
+          </el-form-item>
+          <el-form-item label="密码" prop="password" style="margin-top: 12px">
+            <el-input style="width: 200px" type="password" v-model="loginForm.password"
+                      show-password autocomplete="off" size="small" @keyup.enter.native="confirm"></el-input>
+          </el-form-item>
+
+        </div>
+        <div id="submit-button-cvr" style="margin-top: 40px;margin-left: -120px">
+          <el-form-item>
+            <el-button type="danger" @click="confirm" style="width: 200%">登 录</el-button>
+          </el-form-item>
+        </div>
+        <div id="forgot-pass" style="margin-right: -75px;">
+          <a @click="jump1" style="margin-right: 5px;">忘记密码 ?</a>
+          <a @click="jump2"  style="margin-left: 50px;">注册</a>
+        </div>
+      </div>
+
+    </el-form>
+
+  </div>
+
+</template>
+
 
 <style scoped >
 * {

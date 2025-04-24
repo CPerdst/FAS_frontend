@@ -46,7 +46,7 @@ function handleDropdownCommand(command) {
 </script>
 
 <template>
-  <el-header :style="{ height: props.height, display: 'flex', alignItems: 'center', padding: '0 20px' }">
+  <el-header :style="{ height: `${props.height}`, display: 'flex', alignItems: 'center', padding: '0 20px' }">
     <div class="header-title slide-in">
       {{ props.title }}
     </div>
@@ -77,5 +77,5 @@ function handleDropdownCommand(command) {
 </template>
 
 <style lang="scss" scoped>
-@use '../assets/css/dashboard-header';
+@use '../../assets/css/dashboard-header';
 </style>

@@ -1,5 +1,6 @@
 import {createRouter, createMemoryHistory, createWebHistory} from 'vue-router'
 import Login from '../components/Login.vue'
+import Login2 from '../page/Login.vue'
 import Register from '../components/Register.vue'
 import Dashboard from '../components/Dashboard.vue'
 import Dashboard2 from "../page/Dashboard.vue"
@@ -10,7 +11,9 @@ import ReportSummary from "../components/dashboard/ReportSummary.vue";
 import UserSettings from "../components/dashboard/UserSettings.vue";
 import Settings from "../components/dashboard/Settings.vue";
 
-const oldRoutes = [
+/**
+
+ const oldRoutes = [
     {
         path: '/dashboard',
         name: 'Dashboard',
@@ -75,6 +78,7 @@ const oldRoutes = [
         meta: {guestOnly: true},
     }
 ]
+     */
 
 const routes = [
     {
@@ -84,6 +88,7 @@ const routes = [
         children: [
             {
                 path: '',
+                name: 'empty',
                 redirect: '/dashboard/main',
             },
             {
@@ -113,7 +118,7 @@ const routes = [
             {
                 path: 'login',
                 name: 'login',
-                component: Login,
+                component: Login2,
                 meta: {guestOnly: true},
             },
             {

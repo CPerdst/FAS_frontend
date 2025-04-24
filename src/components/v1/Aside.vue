@@ -7,8 +7,8 @@ import {
   useRouter, useRoute
 } from "vue-router";
 
-import {auth_store} from "../stores/auth_store";
-import {LOGIN_PANEL_URL} from "../utils/constant";
+import {auth_store} from "../../stores/auth_store";
+import {LOGIN_PANEL_URL} from "../../utils/constant";
 
 const asideData = reactive({
   isCollapse: false
