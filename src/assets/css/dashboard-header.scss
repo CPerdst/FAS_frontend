@@ -3,7 +3,7 @@
   font-weight: bold;
   color: #ffffff;
   background-color: #2c3e50;
-  padding: 0 50px;
+  padding: 0 calc((256px - 40px - 60px) / 2);
   border-radius: 10px; /* 圆角 */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 阴影 */
   margin-right: 20px;

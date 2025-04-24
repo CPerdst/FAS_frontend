@@ -27,6 +27,7 @@ import {
   ArrowUp, ArrowDown
 } from "@element-plus/icons-vue";
 import SettingTable from "../components/v1/SettingTable.vue";
+import VueJsonPretty from "vue-json-pretty";
 
 const router = useRouter();
 const route = useRoute();
@@ -124,9 +125,20 @@ const togglePanel = () => {
         </button>
       </div>
       <div class="panel-content" v-if="isExpanded">
-        <pre>{{ authStore.user ? authStore.user : 'null'}}</pre>
-        <pre>{{ authStore.token ? authStore.token : 'null'}}</pre>
-        <pre>{{ authStore.redirectPath ? authStore.redirectPath : 'null' }}</pre>
+        <el-divider border-style="solid" />
+        <div class="user-setting-panel" style="background-color: #ffffff">
+          <VueJsonPretty
+              :data="{
+                user: authStore.user,
+                token: authStore.token,
+                redirectPath: authStore.redirectPath,
+              }"
+              :deep="3"
+              showLength
+              highlightMouseover
+              class="json-viewer"
+          />
+        </div>
       </div>
     </div>
   </template>

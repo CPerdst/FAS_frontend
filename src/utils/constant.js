@@ -32,6 +32,8 @@ export const DEFAULT_USER_AVATAR = 'https://cube.elemecdn.com/3/7c/3ea6beec64369
 
 export const AVATAR_UPLOAD_URL = import.meta.env.VITE_BASE_URL + '/api/file/avatar/upload';
 
+export const UPDATE_USER_URL = import.meta.env.VITE_BASE_URL + '/api/user/update';
+
 // ======================================================================================================================
 // VUE面板路由
 // ======================================================================================================================
@@ -100,9 +102,9 @@ export const HEADER_TITLE = 'FAS';
  * 用于展示authStore的面板，dev环境自动打开
  * @type {boolean}
  */
-export const AUTH_PANEL_SWITCH = false ? import.meta.env.MODE === 'development' : false;
+export const AUTH_PANEL_SWITCH = true ? import.meta.env.MODE === 'development' : false;
 
-export const USER_SETTING_PANEL_SWITCH = false ? import.meta.env.MODE === 'development' : false;
+export const USER_SETTING_PANEL_SWITCH = true ? import.meta.env.MODE === 'development' : false;
 
 
 // ======================================================================================================================

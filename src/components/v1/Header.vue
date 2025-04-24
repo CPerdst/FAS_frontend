@@ -1,9 +1,11 @@
 <script setup>
-import {onMounted, defineProps} from 'vue';
+import {onMounted, defineProps, ref} from 'vue';
 import {
   ArrowDown,
 
 } from '@element-plus/icons-vue';
+
+const isSlideIn = ref(false);
 
 const props = defineProps({
   height: {
@@ -43,11 +45,17 @@ function handleDropdownCommand(command) {
     console.log('未定义的点击事件：', command);
   }
 }
+
+onMounted(() => {
+  setTimeout(() => {
+    isSlideIn.value = true;
+  }, 100);
+})
 </script>
 
 <template>
   <el-header :style="{ height: `${props.height}`, display: 'flex', alignItems: 'center', padding: '0 20px' }">
-    <div class="header-title slide-in">
+    <div class="header-title" :class="{'slide-in': isSlideIn}">
       {{ props.title }}
     </div>
 

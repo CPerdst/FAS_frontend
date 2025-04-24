@@ -1,24 +1,27 @@
 <script setup>
 import {
-  ElAvatar, ElButton, ElForm, ElFormItem, ElIcon, ElMessage, ElRadio, ElUpload
+  ElAvatar, ElButton, ElForm, ElFormItem, ElIcon, ElMessage, ElMessageBox, ElRadio, ElUpload
 } from "element-plus";
 
 import {
   Plus, House, Lock
 } from "@element-plus/icons-vue";
 import {auth_store} from "../../stores/auth_store";
-import {AVATAR_UPLOAD_URL, DEFAULT_USER_AVATAR, long_timeout} from "../../utils/constant";
+import {AVATAR_UPLOAD_URL, DEFAULT_USER_AVATAR, long_timeout, UPDATE_USER_URL} from "../../utils/constant";
 import * as constants from '../../utils/constant'
 import apiClient from "../../utils/asiox_instance";
 import {
-  reactive, defineProps, onMounted
+  reactive, defineProps, onMounted, ref
 } from "vue";
 import * as constant from "../../utils/constant";
 import VueJsonPretty from "vue-json-pretty";
 import 'vue-json-pretty/lib/styles.css'
+import axios from "axios";
 
 
 const authStore = auth_store();
+
+const userFormRef = ref(null);
 
 const props = defineProps({
   userForm: {
@@ -38,81 +41,6 @@ const props = defineProps({
     default: () => {return {};}
   }
 });
-
-const userSettingTabData = reactive({
-  userForm: {
-    username: "",
-    oldPassword: "",
-    password: "",
-    sex: true
-  },
-  rules: {
-    username: [
-      { required: true, message: "请输入用户名", trigger: "blur" },
-      { min: 3, max: 20, message: "长度在 3 到 20 个字符", trigger: "blur" },
-    ],
-    oldPassword: [
-      // 只有当新密码不为空时，旧密码才需要验证
-      {
-        validator: (rule, value, callback) => {
-          if (this.userForm.password && !value) {
-            callback(new Error("修改密码时必须填写旧密码"));
-          } else {
-            callback();
-          }
-        },
-        trigger: "blur",
-      },
-    ],
-    password: [
-      {
-        // 允许留空，但若填写则需符合规则
-        validator: (rule, value, callback) => {
-          if (value && !/^[a-zA-Z0-9]{1,32}$/.test(value)) {
-            callback(new Error("密码必须为1-32位字母或数字"));
-          } else {
-            callback();
-          }
-        },
-        trigger: "blur",
-      },
-    ],
-    gender: [
-      { required: true, message: "请选择性别", trigger: "change" },
-    ],
-  },
-  formItems: {
-    username: {
-      label: "用户名",
-      component: "el-input",
-      props: { size: 'large', 'prefix-icon': House},
-      placeholder: "请输入用户名",
-    },
-    oldPassword: {
-      label: "旧密码",
-      component: "el-input",
-      props: { type: "password", 'show-password': true, size: 'large', 'prefix-icon': Lock},
-      placeholder: "请输入原来的密码（留空则不修改）",
-    },
-    password: {
-      label: "新密码",
-      component: "el-input",
-      props: { type: "password", 'prefix-icon': Lock, maxlength: 32, size: 'large', 'show-password': true},
-      placeholder: "请输入新密码（留空则不修改）",
-    },
-    sex: {
-      label: "性别",
-      component: "el-radio-group",
-      placeholder: "",
-      children: [
-        { label: "男", value: true },
-        { label: "女", value: false },
-      ],
-    },
-  },
-  errors: {}, // 存储后端返回的错误信息
-})
-
 
 async function uploadAvatar({ file }) {
   const formData = new FormData();
@@ -153,8 +81,96 @@ const uploadHeaders = {
   Authorization: `Bearer ${localStorage.getItem('token')}`
 }
 
+function resetUserForm() {
+  Object.assign(props.userForm, {
+    username: authStore.user.username,
+    oldPassword: "",
+    password: "",
+    sex: authStore.user.sex
+  });
+}
+
+async function handleSubmit() {
+  try {
+    const valid = userFormRef.value.validate(async (valid) => {
+      if(valid) {
+        return true;
+      }
+    });
+
+    if (!valid) {
+      console.log("表单验证失败");
+      throw new Error("表单验证失败");
+    }
+
+    // 弹窗确认
+    await ElMessageBox.confirm(
+        "确认保存修改吗？",
+        "提示",
+        {
+          confirmButtonText: "确认",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+    );
+
+    // 调用 Store 的 updateUser 方法
+    const response = await apiClient({
+      url: UPDATE_USER_URL,
+      method: 'POST',
+      data: {
+        username: props.userForm.username,
+        oldPassword: props.userForm.oldPassword,
+        newPassword: props.userForm.password,
+        sex: props.userForm.sex,
+      },
+      config: {
+        timeout: long_timeout
+      }
+    });
+
+    if(response.data.code !== 0) {
+      console.error("更新用户信息失败: ", JSON.stringify(response.data, null, 2));
+      ElMessage.error('更新用户信息失败: ' + response.data.message);
+      return;
+    }
+
+    // 展示成功消息
+    ElMessage.success("用户信息更新成功");
+    // 更新auth_store
+    authStore.$patch((state) => {
+      state.user.username = props.userForm.username;
+      state.user.sex = props.userForm.sex;
+    });
+
+    resetUserForm();
+  } catch (error) {
+    console.log("Error: ", error);
+    if (error === "cancel") {
+      ElMessage.info("已取消保存");
+    } else if (axios.isAxiosError(error)) {
+      // 处理后端返回的错误（如 401、400 等）
+      if (error.response?.status === 401) {
+        ElMessage.error("登录已过期，请重新登录");
+        this.authStore.logout(); // 清除 token 和用户信息
+        this.$router.push("/login"); // 重定向到登录页
+      } else {
+        ElMessage.error(
+            error.response?.data?.message || "更新失败，请检查输入并重试"
+        );
+      }
+    } else if (error?.oldPassword || error?.password || error?.username || error?.gender) {
+      ElMessage.error("请完善表单信息");
+    } else {
+      // 其他错误（如网络错误）
+      ElMessage.error("发生未知错误，请重试");
+    }
+  }
+}
+
 onMounted(() => {
-  console.log(JSON.stringify(props.userForm))
+  // 设置 userForm
+  resetUserForm();
 })
 
 </script>
@@ -180,7 +196,7 @@ onMounted(() => {
     <el-form
         :model="props.userForm"
         :rules="props.rules"
-        ref="userForm"
+        ref="userFormRef"
         label-width="120px"
         class="user-form"
     >
@@ -227,8 +243,8 @@ onMounted(() => {
     </template>
   </div>
   <div class="submit-content">
-    <el-button type="primary" round>重置设置</el-button>
-    <el-button type="primary" round>保存设置</el-button>
+    <el-button type="primary" @click="resetUserForm" round>重置设置</el-button>
+    <el-button type="primary" @click="handleSubmit" round>保存设置</el-button>
   </div>
 
 </template>
