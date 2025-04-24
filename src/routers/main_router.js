@@ -115,9 +115,15 @@ const routes = [
                 name: 'login',
                 component: Login,
                 meta: {guestOnly: true},
-            }
+            },
+            {
+                path: 'register',
+                name: 'register',
+                component: Register,
+                meta: {guestOnly: true},
+            },
         ],
-        meta: {requiresAuth: false}
+
     },
     {
         path: '/:pathMatch(.*)*',

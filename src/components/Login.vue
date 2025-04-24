@@ -99,9 +99,6 @@ export default {
                   password: this.loginForm.password
                 },
                 method: 'post',
-              },
-              {
-                timeout: 5000,
               }
           );
           loginLoading.close();

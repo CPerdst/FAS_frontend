@@ -54,9 +54,9 @@ function handleDropdownCommand(command) {
     <!-- 用户信息和头像 -->
     <div class="user-info">
       <el-dropdown @command="handleDropdownCommand">
-        <span class="user-info-trigger">
-          <el-avatar :size="40" :src="props.user.avatar" :shape="props.avatar_shape"/>
-          <span>{{ props.user.username }}</span>
+        <span class="user-info-trigger slide-in">
+          <el-avatar :size="40" :src="(props.user ? props.user.avatar : 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png')" :shape="props.avatar_shape"/>
+          <span>{{ (props.user ? props.user.username : '未登录')}}</span>
           <el-icon class="arrow-icon">
             <ArrowDown />
           </el-icon>

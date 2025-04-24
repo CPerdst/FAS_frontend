@@ -1,7 +1,9 @@
 import axios from "axios";
 import {auth_store} from "../stores/auth_store";
 import {useRoute, useRouter} from "vue-router";
-import {router} from '../main.js'
+
+const route = useRoute();
+const router = useRouter();
 
 const apiClient = axios.create({
     baseURL: import.meta.env.VITE_BASE_URL
@@ -14,7 +16,7 @@ apiClient.interceptors.request.use(config => {
         config.headers.Authorization = `Bearer ${token}`
     }
     return config;
-})
+});
 
 apiClient.interceptors.response.use(response => {
 
@@ -46,7 +48,7 @@ apiClient.interceptors.response.use(response => {
         if(error.response) {
             if(error.response.status === 401 || error.response.data?.code === 401) {
                 // 重定向到登录页面
-                router.push("/login");
+                router.push("/dashboard/login");
                 // 未授权，处理401错误
                 if(auth.token) {
                     auth.logout();

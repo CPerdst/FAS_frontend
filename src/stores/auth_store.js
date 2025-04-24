@@ -3,11 +3,14 @@ import axios from "axios";
 import {ElMessage} from "element-plus";
 import apiClient from "../utils/asiox_instance";
 import {long_timeout, middle_timeout} from "../utils/constant";
+import {
+    useRoute, useRouter
+} from "vue-router";
+
 
 export const auth_store = defineStore("auth_store", {
     state: () => ({
         user: null,
-        // token: localStorage.getItem("jwtToken") || null,
         token: null,
         redirectPath: null,
     }),
@@ -24,8 +27,8 @@ export const auth_store = defineStore("auth_store", {
             this.token = null;
             this.user = null;
         },
-        goToLogin() {
-            this.$router.push(this.redirectPath || '/dashboard');
+        goToLogin(router) {
+            router.push(this.redirectPath || '/dashboard/login');
             this.redirectPath = null;
         },
         async updateUser(userForm) {

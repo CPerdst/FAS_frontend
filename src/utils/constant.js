@@ -6,6 +6,8 @@ import {
     MostlyCloudy,
     Document
 } from '@element-plus/icons-vue'
+import {auth_store} from "../stores/auth_store";
+import {useRouter} from "vue-router";
 
 export const fast_timeout = 3000 // 三秒
 export const middle_timeout = 5000 // 五秒
