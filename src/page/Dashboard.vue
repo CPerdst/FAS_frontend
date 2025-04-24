@@ -12,7 +12,7 @@ import {
 import {
   ASIDE_FOOTER,
   AUTH_PANEL_SWITCH, HEADER_HEIGHT,
-  LOGIN_PANEL_URL
+  LOGIN_PANEL_URL, settingTableList
 } from "../utils/constant";
 
 import {
@@ -26,11 +26,13 @@ import {
 import {
   ArrowUp, ArrowDown
 } from "@element-plus/icons-vue";
+import SettingTable from "../components/v1/SettingTable.vue";
 
 const router = useRouter();
 const route = useRoute();
 const authStore = auth_store();
 const shellHeight = ref(0);
+const drawer = ref(false);
 
 let logoutObj = constants.userDropDownBoxOption.find(item => item.name === 'logout');
 let settingObj = constants.userDropDownBoxOption.find(item => item.name === 'setting');
@@ -50,6 +52,11 @@ logoutObj.clickHandle = () => {
         token: null,
       }
   )
+}
+
+settingObj.clickHandle = () => {
+  // 打开设置Drawer
+  drawer.value = true;
 }
 
 onMounted(() => {
@@ -97,6 +104,15 @@ const togglePanel = () => {
       </el-container>
     </el-container>
   </div>
+  <el-drawer
+      class="setting-drawer"
+      v-model="drawer"
+      :with-header="false"
+      size="50%"
+      style="backdrop-filter: blur(10px); background-color: rgba(255, 255, 255, 0.8)"
+  >
+    <SettingTable :SettingTableList="constants.settingTableList"/>
+  </el-drawer>
   <template v-if="constants.AUTH_PANEL_SWITCH">
     <div class="state-panel" :class="{ 'expanded': isExpanded }">
       <div class="panel-header">
@@ -114,7 +130,6 @@ const togglePanel = () => {
       </div>
     </div>
   </template>
-
 </template>
 
 <style lang="scss" scoped>

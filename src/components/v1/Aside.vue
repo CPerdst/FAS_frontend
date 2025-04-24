@@ -1,6 +1,6 @@
 <script setup>
 import {
-  reactive, defineProps, onMounted, onBeforeMount, computed
+  reactive, defineProps, computed
 } from "vue";
 
 import {
@@ -9,13 +9,7 @@ import {
 
 import * as constants from "../../utils/constant";
 
-import Github from "../../icon/Github.vue";
-
-import {
-  House
-} from '@element-plus/icons-vue'
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-import {timeUnits} from "element-plus";
 
 const asideData = reactive({
   isCollapse: false

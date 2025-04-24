@@ -7,6 +7,8 @@ import {
     Document
 } from '@element-plus/icons-vue'
 
+import UserSettingTab from "../components/v1/UserSettingTab.vue";
+
 // ======================================================================================================================
 // 固定常量
 // ======================================================================================================================
@@ -25,6 +27,10 @@ export const fast_timeout = 3000 // 三秒
 export const middle_timeout = 5000 // 五秒
 
 export const long_timeout = 10000 // 十秒
+
+export const DEFAULT_USER_AVATAR = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+
+export const AVATAR_UPLOAD_URL = import.meta.env.VITE_BASE_URL + '/api/file/avatar/upload';
 
 // ======================================================================================================================
 // VUE面板路由
@@ -94,7 +100,7 @@ export const HEADER_TITLE = 'FAS';
  * 用于展示authStore的面板，dev环境自动打开
  * @type {boolean}
  */
-export const AUTH_PANEL_SWITCH = false ? import.meta.env.MODE === 'development' : false;
+export const AUTH_PANEL_SWITCH = true ? import.meta.env.MODE === 'development' : false;
 
 
 // ======================================================================================================================
@@ -147,5 +153,18 @@ export const userDropDownBoxOption = [
         clickHandle: () => {
             console.log('点击了退出登录')
         }
+    }
+]
+
+export const settingTableList = [
+    {
+        label: '用户设置',
+        name: 'first',
+        component: UserSettingTab
+    },
+    {
+        label: '其他设置',
+        name: 'second',
+        component: UserSettingTab
     }
 ]
