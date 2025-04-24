@@ -1,3 +1,93 @@
+<script>
+import {ElLoading, ElMessage} from "element-plus";
+import {auth_store} from "../stores/auth_store";
+import apiClient from "../utils/asiox_instance";
+import {ref} from "vue";
+
+export default {
+  name: "MedLogin",
+  data() {
+    return {
+      loginForm: {
+        no: '',
+        password: ''
+      },
+      rules: {
+        no: [
+          {required: true, message: '请输入账号', trigger: 'blur'},
+          {min: 1, max: 20, message: '用户名长度在 20 个字符以内', trigger: 'blur'}
+        ],
+        password: [
+          {required: true, message: '请输密码', trigger: 'blur'},
+          {min: 1, max: 32, message: '密码长度在 32 个字符以内', trigger: 'blur'}
+        ]
+      },
+      authStore: null
+    }
+  },
+  created() {
+    this.authStore = auth_store();
+  },
+  computed: {
+    user() {
+      return this.authStore.user;
+    },
+    token() {
+      return this.authStore.token;
+    }
+  },
+  methods: {
+    confirm() {
+
+      this.$refs.loginForm.validate(async (valid) => {
+        if (valid) {
+          const auth = auth_store()
+          const loginLoading = ElLoading.service({
+            lock: true,
+            text: '登录中，请等待...',
+            background: 'rgba(0, 0, 0, 0.7)',
+          })
+
+          const loginApiUrl = "/api/user/login";
+          const response = await apiClient(
+              loginApiUrl,
+              {
+                data: {
+                  username: this.loginForm.no,
+                  password: this.loginForm.password
+                },
+                method: 'post',
+              }
+          );
+          loginLoading.close();
+
+          if(response.data.code !== 0) {
+            this.$refs.loginForm.resetFields(['password']);
+            console.error("登录失败: ", JSON.stringify(response.data, null, 2));
+            ElMessage.error('登录失败: ' + response.data.message)
+            this.$refs.loginForm.resetFields(['password']);
+            return;
+          }
+
+          // 登录成功
+          console.log("登录成功: " + JSON.stringify(response.data, null, 2));
+          // 首先将用户的数据存入authStore中
+          this.authStore.$patch({
+            user: response.data.data.user,
+            token: response.data.data.token,
+          })
+          // 跳转到首页
+          this.$router.push(this.$router.currentRoute.value.query?.redirect || '/dashboard');
+        }
+      })
+    },
+    jump2() {
+      console.log(this.$router.push("/register"));
+    }
+  }
+}
+</script>
+
 <template>
   <div class="shell">
 
@@ -41,97 +131,7 @@
   </div>
 
 </template>
-<script>
-import {ElLoading, ElMessage} from "element-plus";
-import axios from "axios";
-import {auth_store} from "../stores/auth_store";
-import apiClient from "../utils/asiox_instance";
 
-export default {
-  name: "MedLogin",
-  data() {
-    return {
-      loginForm: {
-        no: '',
-        password: ''
-      },
-      rules: {
-        no: [
-          {required: true, message: '请输入账号', trigger: 'blur'},
-          {min: 1, max: 20, message: '用户名长度在 20 个字符以内', trigger: 'blur'}
-        ],
-        password: [
-          {required: true, message: '请输密码', trigger: 'blur'},
-          {min: 1, max: 32, message: '密码长度在 32 个字符以内', trigger: 'blur'}
-        ]
-      },
-      authStore: null
-    }
-  },
-  created() {
-    this.authStore = auth_store();
-  },
-  computed: {
-    user() {
-      return this.authStore.user;
-    },
-    token() {
-      return this.authStore.token;
-    }
-  },
-  methods: {
-    confirm() {
-      this.$refs.loginForm.validate(async (valid) => {
-        if (valid) {
-          const auth = auth_store()
-          const loginLoading = ElLoading.service({
-            lock: true,
-            text: '登录中，请等待...',
-            background: 'rgba(0, 0, 0, 0.7)',
-          })
-
-          const loginApiUrl = "/api/user/login";
-          const response = await apiClient(
-              loginApiUrl,
-              {
-                data: {
-                  username: this.loginForm.no,
-                  password: this.loginForm.password
-                },
-                method: 'post',
-              },
-              {
-                timeout: 5000,
-              }
-          );
-          loginLoading.close();
-
-          if(response.data.code !== 0) {
-            this.$refs.loginForm.resetFields(['password']);
-            console.error("登录失败: ", JSON.stringify(response.data, null, 2));
-            ElMessage.error('登录失败: ' + response.data.message)
-            this.$refs.loginForm.resetFields(['password']);
-            return;
-          }
-
-          // 登录成功
-          console.log("登录成功: " + JSON.stringify(response.data, null, 2));
-          // 首先将用户的数据存入authStore中
-          this.authStore.$patch({
-            user: response.data.data.user,
-            token: response.data.data.token,
-          })
-          // 跳转到首页
-          this.$router.push(this.$router.currentRoute.value.query?.redirect || '/dashboard');
-        }
-      })
-    },
-    jump2() {
-      console.log(this.$router.push("/register"));
-    }
-  }
-}
-</script>
 
 <style scoped >
 * {

@@ -1,0 +1,38 @@
+.el-aside {
+  position: relative;
+}
+
+.aside-footer {
+  padding: 10px 10px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: calc(100% - 20px);
+
+  .footer-top {
+    padding-top: 12px;
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    span {
+      margin-right: 10px;
+    }
+    a {
+      color: #666;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    a:hover {
+      color: rgba(0, 0, 0, 0.5);
+    }
+  }
+  .footer-time-bar {
+    margin-top: 10px; /* 调整与上一行的间距 */
+  }
+
+}

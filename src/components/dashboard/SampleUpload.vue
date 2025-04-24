@@ -183,7 +183,7 @@ export default {
       this.fetchSampleList();
     },
     async fetchSampleList() {
-      try {
+
         const UPDATE_SAMPLE_URL = import.meta.env.VITE_BASE_URL + '/api/file/sample/list';
         this.loading = true;
         const response = await apiClient.get(UPDATE_SAMPLE_URL, {
@@ -206,12 +206,8 @@ export default {
           hash: item.fileMd5
         }));
 
-      } catch (error) {
-        console.error('获取样本列表失败:', error);
-        this.$message.error('数据加载失败');
-      } finally {
-        this.loading = false;
-      }
+      this.loading = false;
+
     },
     // 新增上传处理方法
     async handleHttpRequest(options) {

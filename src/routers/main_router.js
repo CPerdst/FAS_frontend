@@ -1,7 +1,10 @@
 import {createRouter, createMemoryHistory, createWebHistory} from 'vue-router'
 import Login from '../components/Login.vue'
+import Login2 from '../page/Login.vue'
 import Register from '../components/Register.vue'
+import Register2 from '../page/Register.vue'
 import Dashboard from '../components/Dashboard.vue'
+import Dashboard2 from "../page/Dashboard.vue"
 import {auth_store} from "../stores/auth_store";
 import MainPage from "../components/dashboard/MainPage.vue";
 import SampleUpload from "../components/dashboard/SampleUpload.vue";
@@ -9,7 +12,9 @@ import ReportSummary from "../components/dashboard/ReportSummary.vue";
 import UserSettings from "../components/dashboard/UserSettings.vue";
 import Settings from "../components/dashboard/Settings.vue";
 
-const routes = [
+/**
+
+ const oldRoutes = [
     {
         path: '/dashboard',
         name: 'Dashboard',
@@ -74,6 +79,64 @@ const routes = [
         meta: {guestOnly: true},
     }
 ]
+     */
+
+const routes = [
+    {
+        path: '/dashboard',
+        name: 'dashboard',
+        component: Dashboard2,
+        children: [
+            {
+                path: '',
+                name: 'empty',
+                redirect: '/dashboard/main',
+            },
+            {
+                path: 'main',
+                name: 'main',
+                component: MainPage,
+                meta: {requiresAuth: true},
+            },
+            {
+                path: 'sampleUpload',
+                name: 'sampleUpload',
+                component: SampleUpload,
+                meta: {requiresAuth: true},
+            },
+            {
+                path: 'reportSummary',
+                name: 'reportSummary',
+                component: ReportSummary,
+                meta: {requiresAuth: true},
+            },
+            {
+                path: 'userSettings',
+                name: 'userSettings',
+                component: UserSettings,
+                meta: {requiresAuth: true},
+            },
+            {
+                path: 'login',
+                name: 'login',
+                component: Login2,
+                meta: {guestOnly: true},
+            },
+            {
+                path: 'register',
+                name: 'register',
+                component: Register2,
+                meta: {guestOnly: true},
+            },
+        ],
+
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        redirect: '/dashboard',
+        meta: {guestOnly: true},
+    }
+]
 
 const router = createRouter({
     history: createWebHistory(),
@@ -105,8 +168,8 @@ router.beforeEach(async (to, from, next) => {
 
     // 如果页面需要登录
     if(to.matched.some(record => record.meta.requiresAuth)){
-        console.log(JSON.stringify(to, null, 2));
-        console.log(JSON.stringify(from, null, 2));
+        // console.log(JSON.stringify(to, null, 2));
+        // console.log(JSON.stringify(from, null, 2));
         // console.log(next);
         // console.log(auth.token);
         // console.log(auth.isLoggedIn);
@@ -114,10 +177,10 @@ router.beforeEach(async (to, from, next) => {
         if(!auth.isLoggedIn) {
             // 跳转到登陆页面
             next({
-                path: '/login',
+                path: '/dashboard/login',
                 query: { redirect: to.fullPath }
             });
-        }else {
+        } else {
             // 正常跳转
             next();
         }
