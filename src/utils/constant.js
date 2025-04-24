@@ -15,7 +15,7 @@ import UserSettingTab from "../components/v1/UserSettingTab.vue";
 
 export const AUTHOR = 'l1Akr';
 
-export const AUTHOR_GITHUB = 'https://github.com/CPerdst';
+export const AUTHOR_GITHUB = 'https://github.com/CPerdst/FAS_frontend';
 
 export const ASIDE_FOOTER = {
     author: AUTHOR,

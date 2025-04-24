@@ -1,10 +1,5 @@
 <template>
   <div class="enhanced-upload">
-    <el-breadcrumb separator="/" class="breadcrumb">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>文件上传</el-breadcrumb-item>
-    </el-breadcrumb>
-
     <div class="main-container">
       <!-- 上传表单区域 -->
       <el-card shadow="hover" class="upload-card">
@@ -313,7 +308,7 @@ export default {
 
 <style scoped>
 .enhanced-upload {
-  padding: 24px;
+  padding: 0 24px;
   max-width: 1200px;
   margin: 0 auto;
 }

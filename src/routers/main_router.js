@@ -1,16 +1,13 @@
 import {createRouter, createMemoryHistory, createWebHistory} from 'vue-router'
-import Login from '../components/Login.vue'
-import Login2 from '../page/Login.vue'
-import Register from '../components/Register.vue'
-import Register2 from '../page/Register.vue'
-import Dashboard from '../components/Dashboard.vue'
-import Dashboard2 from "../page/Dashboard.vue"
+import Login from '../page/Login.vue'
+import Register from '../page/Register.vue'
+import Dashboard from "../page/Dashboard.vue"
 import {auth_store} from "../stores/auth_store";
 import MainPage from "../components/dashboard/MainPage.vue";
-import SampleUpload from "../components/dashboard/SampleUpload.vue";
-import ReportSummary from "../components/dashboard/ReportSummary.vue";
+import reportView from "../components/v1/ReportView.vue";
 import UserSettings from "../components/dashboard/UserSettings.vue";
-import Settings from "../components/dashboard/Settings.vue";
+import SampleUpload from '../components/v1/SampleUpload.vue';
+import SampleUploadOld from '../components/dashboard/SampleUpload.vue';
 
 /**
 
@@ -85,7 +82,7 @@ const routes = [
     {
         path: '/dashboard',
         name: 'dashboard',
-        component: Dashboard2,
+        component: Dashboard,
         children: [
             {
                 path: '',
@@ -101,13 +98,13 @@ const routes = [
             {
                 path: 'sampleUpload',
                 name: 'sampleUpload',
-                component: SampleUpload,
+                component: SampleUploadOld,
                 meta: {requiresAuth: true},
             },
             {
-                path: 'reportSummary',
-                name: 'reportSummary',
-                component: ReportSummary,
+                path: 'reportView',
+                name: 'reportView',
+                component: reportView,
                 meta: {requiresAuth: true},
             },
             {
@@ -119,13 +116,13 @@ const routes = [
             {
                 path: 'login',
                 name: 'login',
-                component: Login2,
+                component: Login,
                 meta: {guestOnly: true},
             },
             {
                 path: 'register',
                 name: 'register',
-                component: Register2,
+                component: Register,
                 meta: {guestOnly: true},
             },
         ],

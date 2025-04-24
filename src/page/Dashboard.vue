@@ -6,6 +6,7 @@ import * as constants from '../utils/constant';
 import Aside from "../components/v1/Aside.vue";
 
 import {
+  computed,
   onMounted, ref
 } from "vue";
 
@@ -70,6 +71,39 @@ onMounted(() => {
   shellHeight.value = window.innerHeight - headerHeightNum;
 });
 
+/**
+ * 根据路由获取标题
+ * @param path
+ */
+function getBreadcrumbPath(path) {
+  const split = path.split('/');
+  const suffix = split[split.length - 1];
+  const breadcrumbList = [];
+
+  for(const item of constants.panelMenu) {
+    if(item.name === suffix) {
+      breadcrumbList.push(item.title);
+      break;
+    }
+    let flag = false;
+    if(item.submenu) {
+      for(const subItem of item.submenu) {
+        if(subItem.name === suffix) {
+          breadcrumbList.push(item.title, subItem.title);
+          flag = true;
+        }
+      }
+    }
+    if(flag) {
+      break;
+    }
+    breadcrumbList.pop()
+  }
+
+  console.log('breadcrumbList', breadcrumbList)
+  return breadcrumbList;
+}
+
 // =======================
 // 底部边栏
 // =======================
@@ -101,6 +135,11 @@ const togglePanel = () => {
       <el-container class="main-content" :style="{
         padding: '0 20px',
       }">
+        <el-breadcrumb separator="/" class="breadcrumb">
+          <template v-for="(item, index) in getBreadcrumbPath(route.path)">
+            <el-breadcrumb-item>{{ item }}</el-breadcrumb-item>
+          </template>
+        </el-breadcrumb>
         <router-view/>
       </el-container>
     </el-container>
