@@ -98,7 +98,7 @@ const togglePanel = () => {
         />
       </template>
       <el-container class="main-content" :style="{
-        padding: '20px 20px',
+        padding: '0 20px',
       }">
         <router-view/>
       </el-container>

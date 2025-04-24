@@ -2,6 +2,7 @@ import {createRouter, createMemoryHistory, createWebHistory} from 'vue-router'
 import Login from '../components/Login.vue'
 import Login2 from '../page/Login.vue'
 import Register from '../components/Register.vue'
+import Register2 from '../page/Register.vue'
 import Dashboard from '../components/Dashboard.vue'
 import Dashboard2 from "../page/Dashboard.vue"
 import {auth_store} from "../stores/auth_store";
@@ -124,7 +125,7 @@ const routes = [
             {
                 path: 'register',
                 name: 'register',
-                component: Register,
+                component: Register2,
                 meta: {guestOnly: true},
             },
         ],
