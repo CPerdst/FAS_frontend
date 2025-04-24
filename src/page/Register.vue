@@ -51,7 +51,7 @@ async function submitForm() {
         })
         // 开始注册
         const response = await apiClient.post(import.meta.env.VITE_BASE_URL + "/api/user/register"
-            , this.registerForm
+            , registerData.registerForm
             , {timeout: middle_timeout});
         // 先关闭加载页面
         registerLoading.close();
@@ -61,23 +61,20 @@ async function submitForm() {
         if(code === 0){
           console.log("注册成功: " + JSON.stringify(response.data, null, 2));
           ElMessage.success('注册成功');
-          this.goToLogin();
-        }else {
-          console.log("注册失败: ", JSON.stringify(response.data, null, 2));
-          ElMessage.error('注册失败: ' + response.data.message);
+          await router.push("/dashboard/login");
+          return;
         }
+        // 注册失败
+        console.log("注册失败: ", JSON.stringify(response.data, null, 2));
+        ElMessage.error('注册失败: ' + response.data.message);
+        Object.assign(registerData.registerForm, {
+          username: '',
+          password: '',
+          sex: true // 根据需求决定是否重置为默认值
+        })
       }
     })
   }
-}
-
-function resetForm() {
-  // this.registerForm = {
-  //   username: '',
-  //   password: '',
-  //   sex: true
-  // }
-  ElMessage.success("Reset Successfully!");
 }
 
 function goToLogin() {
