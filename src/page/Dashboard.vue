@@ -10,6 +10,7 @@ import {
 } from "vue";
 
 import {
+  ASIDE_FOOTER,
   AUTH_PANEL_SWITCH, HEADER_HEIGHT,
   LOGIN_PANEL_URL
 } from "../utils/constant";
@@ -86,6 +87,7 @@ const togglePanel = () => {
         <Aside
             :panel-menu="constants.panelMenu"
             :router="true"
+            :footer="constants.ASIDE_FOOTER"
         />
       </template>
       <el-container class="main-content" :style="{

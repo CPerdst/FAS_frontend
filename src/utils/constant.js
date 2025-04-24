@@ -6,11 +6,24 @@ import {
     MostlyCloudy,
     Document
 } from '@element-plus/icons-vue'
-import {auth_store} from "../stores/auth_store";
-import {useRouter} from "vue-router";
+
+// ======================================================================================================================
+// 固定常量
+// ======================================================================================================================
+
+export const AUTHOR = 'l1Akr';
+
+export const AUTHOR_GITHUB = 'https://github.com/CPerdst';
+
+export const ASIDE_FOOTER = {
+    author: AUTHOR,
+    github: AUTHOR_GITHUB
+}
 
 export const fast_timeout = 3000 // 三秒
+
 export const middle_timeout = 5000 // 五秒
+
 export const long_timeout = 10000 // 十秒
 
 // ======================================================================================================================
@@ -69,7 +82,6 @@ export const LOGIN_URL = '/login';
  */
 export const LOGOUT_URL = '/logout'
 
-
 export const HEADER_HEIGHT = '70px';
 
 export const HEADER_TITLE = 'FAS';
@@ -82,7 +94,7 @@ export const HEADER_TITLE = 'FAS';
  * 用于展示authStore的面板，dev环境自动打开
  * @type {boolean}
  */
-export const AUTH_PANEL_SWITCH = import.meta.env.MODE === 'development';
+export const AUTH_PANEL_SWITCH = false ? import.meta.env.MODE === 'development' : false;
 
 
 // ======================================================================================================================

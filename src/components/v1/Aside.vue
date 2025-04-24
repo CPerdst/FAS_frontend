@@ -7,8 +7,14 @@ import {
   useRouter, useRoute
 } from "vue-router";
 
-import {auth_store} from "../../stores/auth_store";
-import {LOGIN_PANEL_URL} from "../../utils/constant";
+import * as constants from "../../utils/constant";
+
+import Github from "../../icon/Github.vue";
+
+import {
+  House
+} from '@element-plus/icons-vue'
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 const asideData = reactive({
   isCollapse: false
@@ -22,6 +28,15 @@ const props = defineProps({
   panelMenu: {
     type: Array,
     default: () => []
+  },
+  footer: {
+    type: Object,
+    default: () => {
+      return {
+        author: '',
+        github: ''
+      }
+    }
   }
 });
 
@@ -32,7 +47,7 @@ const route = useRoute();
 
 <template>
   <el-aside
-      :width="asideData.isCollapse ? '64px' : '200px'"
+      :width="asideData.isCollapse ? '64px' : '256px'"
       style="background-color: #f5f5f5;"
   >
     <el-menu
@@ -74,10 +89,19 @@ const route = useRoute();
       </template>
 
     </el-menu>
-
+    <template v-if="footer.author">
+      <div class="aside-footer" v-if="!asideData.isCollapse">
+        <span>Created by {{constants.AUTHOR}}</span>
+        <a :href="constants.AUTHOR_GITHUB" target="_blank" rel="noopener noreferrer">
+          <el-icon class="github-icon">
+            <font-awesome-icon :icon="['fab', 'github']"/>
+          </el-icon>
+        </a>
+      </div>
+    </template>
   </el-aside>
 </template>
 
-<style scoped>
-@use "../assets/css/aside.css";
+<style lang="scss" scoped>
+@use "../../assets/css/aside";
 </style>
