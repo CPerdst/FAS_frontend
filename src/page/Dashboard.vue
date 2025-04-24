@@ -90,7 +90,7 @@ const togglePanel = () => {
     <el-container class="main-container"
                   :style="{height: `${shellHeight}px`}"
     >
-      <template v-if="route.path !== '/dashboard/login'">
+      <template v-if="route.path !== '/dashboard/login' && route.path !== '/dashboard/register'">
         <Aside
             :panel-menu="constants.panelMenu"
             :router="true"
@@ -109,7 +109,7 @@ const togglePanel = () => {
       v-model="drawer"
       :with-header="false"
       size="50%"
-      style="backdrop-filter: blur(10px); background-color: rgba(255, 255, 255, 0.8)"
+      style="backdrop-filter: blur(4px); background-color: rgba(255, 255, 255, 0.7);"
   >
     <SettingTable :SettingTableList="constants.settingTableList"/>
   </el-drawer>

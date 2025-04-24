@@ -4,20 +4,44 @@ import {
 } from "element-plus";
 
 import {
-  Plus
+  Plus, House, Lock
 } from "@element-plus/icons-vue";
 import {auth_store} from "../../stores/auth_store";
 import {AVATAR_UPLOAD_URL, DEFAULT_USER_AVATAR, long_timeout} from "../../utils/constant";
 import * as constants from '../../utils/constant'
 import apiClient from "../../utils/asiox_instance";
-import {reactive} from "vue";
+import {
+  reactive, defineProps, onMounted
+} from "vue";
+import * as constant from "../../utils/constant";
+import VueJsonPretty from "vue-json-pretty";
+import 'vue-json-pretty/lib/styles.css'
 
 
 const authStore = auth_store();
 
+const props = defineProps({
+  userForm: {
+    type: Object,
+    default: () => {return {};}
+  },
+  rules: {
+    type: Object,
+    default: () => {return {};}
+  },
+  formItems: {
+    type: Object,
+    default: () => {return {};}
+  },
+  errors: {
+    type: Object,
+    default: () => {return {};}
+  }
+});
+
 const userSettingTabData = reactive({
   userForm: {
-    username: "unknown",
+    username: "",
     oldPassword: "",
     password: "",
     sex: true
@@ -57,6 +81,36 @@ const userSettingTabData = reactive({
       { required: true, message: "请选择性别", trigger: "change" },
     ],
   },
+  formItems: {
+    username: {
+      label: "用户名",
+      component: "el-input",
+      props: { size: 'large', 'prefix-icon': House},
+      placeholder: "请输入用户名",
+    },
+    oldPassword: {
+      label: "旧密码",
+      component: "el-input",
+      props: { type: "password", 'show-password': true, size: 'large', 'prefix-icon': Lock},
+      placeholder: "请输入原来的密码（留空则不修改）",
+    },
+    password: {
+      label: "新密码",
+      component: "el-input",
+      props: { type: "password", 'prefix-icon': Lock, maxlength: 32, size: 'large', 'show-password': true},
+      placeholder: "请输入新密码（留空则不修改）",
+    },
+    sex: {
+      label: "性别",
+      component: "el-radio-group",
+      placeholder: "",
+      children: [
+        { label: "男", value: true },
+        { label: "女", value: false },
+      ],
+    },
+  },
+  errors: {}, // 存储后端返回的错误信息
 })
 
 
@@ -99,70 +153,86 @@ const uploadHeaders = {
   Authorization: `Bearer ${localStorage.getItem('token')}`
 }
 
+onMounted(() => {
+  console.log(JSON.stringify(props.userForm))
+})
 
 </script>
 
 <template>
-  <div class="avatar-upload">
-    <el-upload
-        class="upload-demo"
-        :http-request="uploadAvatar"
-        :on-success="handleAvatarSuccess"
-        :before-upload="beforeAvatarUpload"
-        :headers="uploadHeaders"
-        :show-file-list="false"
-    >
-      <el-avatar v-if="authStore.user?.avatar" :size="120" :src="authStore.user.avatar" class="avatar" />
-      <el-avatar v-else :size="120" class="default-avatar" :src="constants.DEFAULT_USER_AVATAR">
-        <el-icon><Plus /></el-icon>
-      </el-avatar>
-    </el-upload>
-  </div>
-
-  <el-form
-      :model="userForm"
-      :rules="rules"
-      ref="userForm"
-      label-width="120px"
-      class="user-form"
-  >
-    <!-- 表单项 -->
-    <el-form-item
-        v-for="(item, key) in formItems"
-        :key="key"
-        :label="item.label"
-        :prop="key"
-        class="form-item"
-    >
-      <component
-          :is="item.component"
-          v-model="userForm[key]"
-          v-bind="item.props"
-          :placeholder="item.placeholder"
+  <div class="form-content">
+    <div class="avatar-upload">
+      <el-upload
+          class="upload-demo"
+          :http-request="uploadAvatar"
+          :on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload"
+          :headers="uploadHeaders"
+          :show-file-list="false"
       >
-        <!-- 渲染子组件（如 Radio） -->
-        <el-radio
-            v-for="option in item.children"
-            :key="option.value"
-            :label="option.value"
-        >
-          {{ option.label }}
-        </el-radio>
-      </component>
-      <!-- 错误提示 -->
-      <div v-if="errors[key]" class="error-message">
-        <i class="el-icon-warning"></i> {{ errors[key] }}
-      </div>
-    </el-form-item>
+        <el-avatar v-if="authStore.user?.avatar" :size="120" :src="authStore.user.avatar" class="avatar" />
+        <el-avatar v-else :size="120" class="default-avatar" :src="constants.DEFAULT_USER_AVATAR">
+          <el-icon><Plus /></el-icon>
+        </el-avatar>
+      </el-upload>
+    </div>
 
-    <!-- 保存按钮 -->
-    <el-form-item class="submit-item">
-      <el-button type="primary" @click="confirmSubmit" round>保存设置</el-button>
-    </el-form-item>
-  </el-form>
+    <el-form
+        :model="props.userForm"
+        :rules="props.rules"
+        ref="userForm"
+        label-width="120px"
+        class="user-form"
+    >
+      <!-- 表单项 -->
+      <el-form-item
+          v-for="(item, key) in props.formItems"
+          :key="key"
+          :label="item.label"
+          :prop="key"
+          class="form-item"
+      >
+        <component
+            :is="item.component"
+            v-model="props.userForm[key]"
+            v-bind="item.props"
+            :placeholder="item.placeholder"
+        >
+          <!-- 渲染子组件（如 Radio） -->
+          <el-radio
+              v-for="option in item.children"
+              :key="option.value"
+              :label="option.value"
+          >
+            {{ option.label }}
+          </el-radio>
+        </component>
+        <!-- 错误提示 -->
+        <div v-if="props.errors[key]" class="error-message">
+          <i class="el-icon-warning"></i> {{ props.errors[key] }}
+        </div>
+      </el-form-item>
+    </el-form>
+    <template v-if="constant.USER_SETTING_PANEL_SWITCH">
+      <el-divider border-style="solid" />
+      <div class="user-setting-panel" style="background-color: #ffffff">
+        <VueJsonPretty
+            :data="props"
+            :deep="3"
+            showLength
+            highlightMouseover
+            class="json-viewer"
+        />
+      </div>
+    </template>
+  </div>
+  <div class="submit-content">
+    <el-button type="primary" round>重置设置</el-button>
+    <el-button type="primary" round>保存设置</el-button>
+  </div>
 
 </template>
 
-<style scoped>
-
+<style lang="scss" scoped>
+@use '../../assets/css/user_setting_tab.scss';
 </style>

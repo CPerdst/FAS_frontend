@@ -1,0 +1,11 @@
+.el-tabs--top {
+  height: 100%;
+  .el-tab-pane {
+    height: 100%;
+    position: relative;
+    flex-direction: column;
+    display: flex;
+  }
+
+}
+

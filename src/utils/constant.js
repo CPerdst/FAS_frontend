@@ -4,7 +4,7 @@ import {
     Upload,
     House,
     MostlyCloudy,
-    Document
+    Document, Lock
 } from '@element-plus/icons-vue'
 
 import UserSettingTab from "../components/v1/UserSettingTab.vue";
@@ -100,7 +100,9 @@ export const HEADER_TITLE = 'FAS';
  * 用于展示authStore的面板，dev环境自动打开
  * @type {boolean}
  */
-export const AUTH_PANEL_SWITCH = true ? import.meta.env.MODE === 'development' : false;
+export const AUTH_PANEL_SWITCH = false ? import.meta.env.MODE === 'development' : false;
+
+export const USER_SETTING_PANEL_SWITCH = false ? import.meta.env.MODE === 'development' : false;
 
 
 // ======================================================================================================================
@@ -160,7 +162,80 @@ export const settingTableList = [
     {
         label: '用户设置',
         name: 'first',
-        component: UserSettingTab
+        component: UserSettingTab,
+        props: {
+            userForm: {
+                username: "",
+                oldPassword: "",
+                password: "",
+                sex: true
+            },
+            rules: {
+                username: [
+                    { required: true, message: "请输入用户名", trigger: "blur" },
+                    { min: 3, max: 20, message: "长度在 3 到 20 个字符", trigger: "blur" },
+                ],
+                oldPassword: [
+                    // 只有当新密码不为空时，旧密码才需要验证
+                    {
+                        validator: (rule, value, callback) => {
+                            // if (this.userForm.password && !value) {
+                            //     callback(new Error("修改密码时必须填写旧密码"));
+                            // } else {
+                            //     callback();
+                            // }
+                        },
+                        trigger: "blur",
+                    },
+                ],
+                password: [
+                    {
+                        // 允许留空，但若填写则需符合规则
+                        validator: (rule, value, callback) => {
+                            // if (value && !/^[a-zA-Z0-9]{1,32}$/.test(value)) {
+                            //     callback(new Error("密码必须为1-32位字母或数字"));
+                            // } else {
+                            //     callback();
+                            // }
+                        },
+                        trigger: "blur",
+                    },
+                ],
+                gender: [
+                    { required: true, message: "请选择性别", trigger: "change" },
+                ],
+            },
+            formItems: {
+                username: {
+                    label: "用户名",
+                    component: "el-input",
+                    props: { size: 'large', 'prefix-icon': House},
+                    placeholder: "请输入用户名",
+                },
+                oldPassword: {
+                    label: "旧密码",
+                    component: "el-input",
+                    props: { type: "password", 'show-password': true, size: 'large', 'prefix-icon': Lock},
+                    placeholder: "请输入原来的密码（留空则不修改）",
+                },
+                password: {
+                    label: "新密码",
+                    component: "el-input",
+                    props: { type: "password", 'prefix-icon': Lock, maxlength: 32, size: 'large', 'show-password': true},
+                    placeholder: "请输入新密码（留空则不修改）",
+                },
+                sex: {
+                    label: "性别",
+                    component: "el-radio-group",
+                    placeholder: "",
+                    children: [
+                        { label: "男", value: true },
+                        { label: "女", value: false },
+                    ],
+                },
+            },
+            errors: {}
+        }
     },
     {
         label: '其他设置',
