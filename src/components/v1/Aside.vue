@@ -1,6 +1,6 @@
 <script setup>
 import {
-  reactive, defineProps, onMounted, onBeforeMount
+  reactive, defineProps, onMounted, onBeforeMount, computed
 } from "vue";
 
 import {
@@ -15,6 +15,7 @@ import {
   House
 } from '@element-plus/icons-vue'
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import {timeUnits} from "element-plus";
 
 const asideData = reactive({
   isCollapse: false
@@ -40,7 +41,16 @@ const props = defineProps({
   }
 });
 
+const currentDate = computed(() => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+})
+
 const router = useRouter();
+
 const route = useRoute();
 
 </script>
@@ -91,12 +101,19 @@ const route = useRoute();
     </el-menu>
     <template v-if="footer.author">
       <div class="aside-footer" v-if="!asideData.isCollapse">
-        <span>Created by {{constants.AUTHOR}}</span>
-        <a :href="constants.AUTHOR_GITHUB" target="_blank" rel="noopener noreferrer">
-          <el-icon class="github-icon">
-            <font-awesome-icon :icon="['fab', 'github']"/>
-          </el-icon>
-        </a>
+        <div class="footer-top">
+          <span>Created by {{constants.AUTHOR}}</span>
+          <template v-if="footer.github">
+            <a :href="constants.AUTHOR_GITHUB" target="_blank" rel="noopener noreferrer">
+              <el-icon class="github-icon">
+                <font-awesome-icon :icon="['fab', 'github']"/>
+              </el-icon>
+            </a>
+          </template>
+        </div>
+        <div class="footer-time-bar">
+          {{currentDate}}
+        </div>
       </div>
     </template>
   </el-aside>
