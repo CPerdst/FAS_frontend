@@ -7,7 +7,9 @@ import router from "./routers/main_router";
 import {createPinia} from "pinia";
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import {library} from "@fortawesome/fontawesome-svg-core";
-import {faGithub} from "@fortawesome/free-brands-svg-icons";
+import {
+    faGithub, faWeibo
+} from "@fortawesome/free-brands-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 const pinia = createPinia({});

@@ -29,6 +29,7 @@ import {
 } from "@element-plus/icons-vue";
 import SettingTable from "../components/v1/SettingTable.vue";
 import VueJsonPretty from "vue-json-pretty";
+import Footer from "../components/v1/Footer.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -133,14 +134,25 @@ const togglePanel = () => {
         />
       </template>
       <el-container class="main-content" :style="{
-        padding: '0 20px',
+        padding: '0 0',
       }">
-        <el-breadcrumb separator="/" class="breadcrumb">
-          <template v-for="(item, index) in getBreadcrumbPath(route.path)">
-            <el-breadcrumb-item>{{ item }}</el-breadcrumb-item>
-          </template>
-        </el-breadcrumb>
-        <router-view/>
+        <template v-if="route.path !== '/dashboard/login' && route.path !== '/dashboard/register'">
+          <el-breadcrumb separator="/" class="breadcrumb">
+            <template v-for="(item, index) in getBreadcrumbPath(route.path)">
+              <el-breadcrumb-item>{{ item }}</el-breadcrumb-item>
+            </template>
+          </el-breadcrumb>
+        </template>
+        <router-view style="flex: 1;"/>
+<!--        <Footer :author="constants.AUTHOR"-->
+<!--                :github="constants.AUTHOR_GITHUB"-->
+<!--                :social-links="constants.FOOTER_SOCIAL_LINKS"-->
+<!--        />-->
+        <Footer
+            :author="constants.FOOTER.author"
+            :social-links="constants.FOOTER.socialLinks"
+            :time="constants.FOOTER.time"
+        />
       </el-container>
     </el-container>
   </div>

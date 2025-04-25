@@ -93,7 +93,7 @@ const route = useRoute();
       </template>
 
     </el-menu>
-    <template v-if="footer.author">
+    <template v-if="constants.ASIDE_FOOTER_SWITCH && footer.author">
       <div class="aside-footer" v-if="!asideData.isCollapse">
         <div class="footer-top">
           <span>Created by {{constants.AUTHOR}}</span>

@@ -50,6 +50,13 @@
       transform: rotate(180deg);
     }
   }
+  .user-name-span {
+    max-width: 80px;
+    min-width: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 
 .el-header {

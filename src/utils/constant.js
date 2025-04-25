@@ -8,19 +8,25 @@ import {
 } from '@element-plus/icons-vue'
 
 import UserSettingTab from "../components/v1/UserSettingTab.vue";
+import {
+    faGithub
+} from "@fortawesome/free-brands-svg-icons";
 
 // ======================================================================================================================
 // 固定常量
 // ======================================================================================================================
 
+/**
+ * 作者
+ * @type {string}
+ */
 export const AUTHOR = 'l1Akr';
 
+/**
+ * 作者GitHub
+ * @type {string}
+ */
 export const AUTHOR_GITHUB = 'https://github.com/CPerdst/FAS_frontend';
-
-export const ASIDE_FOOTER = {
-    author: AUTHOR,
-    github: AUTHOR_GITHUB
-}
 
 export const fast_timeout = 3000 // 三秒
 
@@ -102,9 +108,11 @@ export const HEADER_TITLE = 'FAS';
  * 用于展示authStore的面板，dev环境自动打开
  * @type {boolean}
  */
-export const AUTH_PANEL_SWITCH = true ? import.meta.env.MODE === 'development' : false;
+export const AUTH_PANEL_SWITCH = false ? import.meta.env.MODE === 'development' : false;
 
 export const USER_SETTING_PANEL_SWITCH = true ? import.meta.env.MODE === 'development' : false;
+
+export const ASIDE_FOOTER_SWITCH = false;
 
 
 // ======================================================================================================================
@@ -245,3 +253,32 @@ export const settingTableList = [
         component: UserSettingTab
     }
 ]
+
+// ======================================================================================================================
+// 页脚信息
+// ======================================================================================================================
+
+/**
+ * Aside 页脚信息
+ * @type {{author: string, github: string}}
+ */
+export const ASIDE_FOOTER = {
+    author: AUTHOR,
+    github: AUTHOR_GITHUB
+}
+
+/**
+ * 页脚信息
+ * @type {{author: string, socialLinks: [{icon: IconDefinition, title: string, url: string}], time: boolean}}
+ */
+export const FOOTER = {
+    author: AUTHOR,
+    socialLinks: [
+        {
+            icon: faGithub,
+            title: 'github',
+            url: AUTHOR_GITHUB
+        }
+    ],
+    time: true // 用于开启时间戳
+}
