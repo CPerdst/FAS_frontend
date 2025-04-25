@@ -6,14 +6,11 @@ import * as constants from '../utils/constant';
 import Aside from "../components/v1/Aside.vue";
 
 import {
-  computed,
-  onMounted, ref
+  computed, onMounted, ref
 } from "vue";
 
 import {
-  ASIDE_FOOTER,
-  AUTH_PANEL_SWITCH, HEADER_HEIGHT, JSON_PANEL_PROPS,
-  LOGIN_PANEL_URL, settingTableList
+  HEADER_HEIGHT, LOGIN_PANEL_URL
 } from "../utils/constant";
 
 import {
@@ -70,9 +67,9 @@ onMounted(() => {
   shellHeight.value = window.innerHeight - headerHeightNum;
 
   // 添加用户信息监视
-  addPropsToJsonPanel('user', authStore.user);
-  addPropsToJsonPanel('token', authStore.token);
-  addPropsToJsonPanel('redirectPath', authStore.redirectPath);
+  addPropsToJsonPanel('user', computed(() => {return auth_store().user;}));
+  addPropsToJsonPanel('token', computed(() => {return auth_store().token;}));
+  addPropsToJsonPanel('redirectPath', computed(() => {return auth_store().redirectPath;}));
 });
 
 /**

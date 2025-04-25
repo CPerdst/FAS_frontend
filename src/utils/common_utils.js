@@ -1,6 +1,5 @@
 import {computed} from "vue";
-import * as constant from "./constant";
-
+import {JSON_PANEL_PROPS} from "./constant";
 
 
 export const currentDate = computed(() => {
@@ -12,13 +11,70 @@ export const currentDate = computed(() => {
 });
 
 export function addPropsToJsonPanel(key, props) {
-    constant.JSON_PANEL_PROPS.data.push({'key': key, 'value': props})
+    JSON_PANEL_PROPS.data[key] = props; // 直接绑定响应式对象
 }
 
 export function removePropsFromJsonPanel(key) {
-    for(let item of constant.JSON_PANEL_PROPS.data) {
-        if (item.key === key) {
-            constant.JSON_PANEL_PROPS.data.splice(constant.JSON_PANEL_PROPS.data.indexOf(item), 1);
-         }
+    Object.keys(JSON_PANEL_PROPS).forEach((__key) => {
+        if(__key === key) {
+            delete JSON_PANEL_PROPS[__key];
+        }
+    })
+}
+
+export function getStatusName(status) {
+    switch (status) {
+        case 0:
+            return {
+                name: '待处理',
+                color: 'primary'
+            };
+        case 1:
+            return {
+                name: '处理中',
+                color: 'primary'
+            };
+        case 2:
+            return {
+                name: '已完成',
+                color: 'success'
+            };
+        case 3:
+            return {
+                name: '已取消',
+                color: 'danger'
+            };
+        default:
+            return {
+                name: '未知状态',
+                color: 'warning'
+            };
     }
+}
+
+export function getTimeBuArrayTimeFormat (arrayTime) {
+    const year = arrayTime[0];
+    const month = arrayTime[1];
+    const day = arrayTime[2];
+    return new Date(year, month - 1, day);
+}
+
+export function getFormatedDate(date) {
+    return date.toLocaleDateString();
+}
+
+export function getKBFormatedSize(size) {
+    return `${(size / 1024).toFixed(2)} KB`;
+}
+
+export function getMBFormatedSize(size) {
+    return `${(size / 1024 / 1024).toFixed(2)} MB`;
+}
+
+/**
+ * 检查是否是日期格式的字符串
+ * @param value
+ */
+export function checkDateType(value) {
+    return /^\d{4}\/\d{2}\/\d{2}$/.test(value);
 }

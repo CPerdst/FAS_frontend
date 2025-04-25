@@ -44,6 +44,12 @@ export const AVATAR_UPLOAD_URL = import.meta.env.VITE_BASE_URL + '/api/file/avat
 
 export const UPDATE_USER_URL = import.meta.env.VITE_BASE_URL + '/api/user/update';
 
+export const SAMPLE_UPLOAD_URL = import.meta.env.VITE_BASE_URL + '/api/file/sample/upload';
+
+export const FETCH_SAMPLE_URL = import.meta.env.VITE_BASE_URL + '/api/file/sample/list';
+
+export const MAX_SAMPLE_SIZE = 1024 * 1024 * 50; // 50MB
+
 // ======================================================================================================================
 // VUE面板路由
 // ======================================================================================================================
@@ -294,22 +300,20 @@ export const FOOTER = {
 // ======================================================================================================================
 
 export const SAMPLE_UPLOAD_FORM_PROPS = {
-    'http-request': null,
-    'auto-upload': false,
-    'before-upload': null,
-    'on-success': null,
-    'on-remove': null,
-    'on-change': null,
-    'on-preview': null,
-    'on-exceed': null,
+    'http-request':     null,
+    'auto-upload':      false,
+    'before-upload':    null,
+    'on-success':       null,
+    'on-remove':        null,
+    'on-change':        null,
+    'on-preview':       null,
+    'on-exceed':        null,
     limit: 10,              // 默认限制上传数量
     'file-list': []
 };
 
 export const JSON_PANEL_PROPS = reactive({
-    data: [
-
-    ]
+    data: {}
 });
 
 
@@ -318,3 +322,44 @@ export const JSON_PANEL_PROPS = reactive({
 // 列表
 // ======================================================================================================================
 
+export const TABLE_SHOWN_COLUMNS = [
+    {
+        name: 'name',
+        title: '文件名',
+        open: false,
+        rowList: []
+    },
+    {
+        name: 'date',
+        title: '上传时间',
+        open: true,
+    },
+    {
+        name: 'hash',
+        title: '文件哈希值',
+        open: true,
+    },
+    {
+        name: 'status',
+        title: '状态',
+        open: true,
+    },
+    {
+        name: 'size',
+        title: '文件大小',
+        open: true,
+        rowList: []
+    },
+    {
+        name: 'type',
+        title: '文件类型',
+        open: false,
+        rowList: []
+    },
+    {
+        name: 'download_url',
+        title: '下载地址',
+        open: false,
+    },
+
+]

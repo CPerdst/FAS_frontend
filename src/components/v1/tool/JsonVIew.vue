@@ -23,10 +23,6 @@ const props = defineProps({
   }
 });
 
-const formattedJson = computed(() => {
-  return JSON.stringify(props.JsonPanel.data, null, 2);
-});
-
 </script>
 
 <template>

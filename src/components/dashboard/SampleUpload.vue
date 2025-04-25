@@ -143,6 +143,7 @@
 <script>
 import { UploadFilled, Upload } from '@element-plus/icons-vue'
 import apiClient from "../../utils/asiox_instance";
+import {getStatusName} from "../../utils/common_utils";
 
 export default {
   name: 'EnhancedUpload',
@@ -196,13 +197,12 @@ export default {
         this.sampleList = this.sampleList.map(item => ({
           name: item.filename,
           size: item.fileSize,
-          status: item.status || 'pending',
-          uploadTime: item.createTime,
+          status: getStatusName(item.status),
+          createTime: item.createTime,
           hash: item.fileMd5
         }));
 
       this.loading = false;
-
     },
     // 新增上传处理方法
     async handleHttpRequest(options) {

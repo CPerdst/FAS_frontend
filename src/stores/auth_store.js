@@ -1,11 +1,6 @@
-import {createPinia, defineStore} from "pinia";
-import axios from "axios";
-import {ElMessage} from "element-plus";
+import {defineStore} from "pinia";
 import apiClient from "../utils/asiox_instance";
-import {long_timeout, middle_timeout} from "../utils/constant";
-import {
-    useRoute, useRouter
-} from "vue-router";
+import {middle_timeout} from "../utils/constant";
 
 
 export const auth_store = defineStore("auth_store", {
@@ -47,4 +42,4 @@ export const auth_store = defineStore("auth_store", {
             return response?.data || null; // 返回后端数据
         },
     }
-})
+});

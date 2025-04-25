@@ -1,6 +1,10 @@
 .enhanced-upload {
   padding: 0 40px;
 
+  .el-card {
+    margin-bottom: 40px;
+  }
+
   .upload-card {
     padding: 20px 40px;
 
@@ -10,5 +14,10 @@
         width: calc(100%);
       }
     }
+  }
+
+  .el-pagination {
+    margin-top: 20px;
+    justify-content: flex-end;
   }
 }
