@@ -98,7 +98,7 @@ const routes = [
             {
                 path: 'sampleUpload',
                 name: 'sampleUpload',
-                component: SampleUploadOld,
+                component: SampleUpload,
                 meta: {requiresAuth: true},
             },
             {

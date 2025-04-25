@@ -7,6 +7,10 @@ import {
     Document, Lock
 } from '@element-plus/icons-vue'
 
+import {
+    reactive
+} from "vue";
+
 import UserSettingTab from "../components/v1/UserSettingTab.vue";
 import {
     faGithub
@@ -110,6 +114,8 @@ export const HEADER_TITLE = 'FAS';
  */
 export const AUTH_PANEL_SWITCH = false ? import.meta.env.MODE === 'development' : false;
 
+export const JSON_VIEW_SWITCH = true ? import.meta.env.MODE === 'development' : false;
+
 export const USER_SETTING_PANEL_SWITCH = true ? import.meta.env.MODE === 'development' : false;
 
 export const ASIDE_FOOTER_SWITCH = false;
@@ -145,7 +151,7 @@ export const panelMenu = [
             }
         ]
     }
-]
+];
 
 export const userDropDownBoxOption = [
     {
@@ -166,7 +172,7 @@ export const userDropDownBoxOption = [
             console.log('点击了退出登录')
         }
     }
-]
+];
 
 export const settingTableList = [
     {
@@ -252,7 +258,7 @@ export const settingTableList = [
         name: 'second',
         component: UserSettingTab
     }
-]
+];
 
 // ======================================================================================================================
 // 页脚信息
@@ -265,7 +271,7 @@ export const settingTableList = [
 export const ASIDE_FOOTER = {
     author: AUTHOR,
     github: AUTHOR_GITHUB
-}
+};
 
 /**
  * 页脚信息
@@ -281,4 +287,34 @@ export const FOOTER = {
         }
     ],
     time: true // 用于开启时间戳
-}
+};
+
+// ======================================================================================================================
+// 其他组件的参数
+// ======================================================================================================================
+
+export const SAMPLE_UPLOAD_FORM_PROPS = {
+    'http-request': null,
+    'auto-upload': false,
+    'before-upload': null,
+    'on-success': null,
+    'on-remove': null,
+    'on-change': null,
+    'on-preview': null,
+    'on-exceed': null,
+    limit: 10,              // 默认限制上传数量
+    'file-list': []
+};
+
+export const JSON_PANEL_PROPS = reactive({
+    data: [
+
+    ]
+});
+
+
+
+// ======================================================================================================================
+// 列表
+// ======================================================================================================================
+
