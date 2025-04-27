@@ -24,25 +24,30 @@ export function removePropsFromJsonPanel(key) {
 
 export function getStatusName(status) {
     switch (status) {
-        case 0:
-            return {
-                name: '待处理',
-                color: 'primary'
-            };
         case 1:
             return {
-                name: '处理中',
+                name: '未处理',
                 color: 'primary'
             };
         case 2:
             return {
-                name: '已完成',
-                color: 'success'
+                name: '处理中',
+                color: 'primary'
             };
         case 3:
             return {
-                name: '已取消',
+                name: '未发现病毒',
+                color: 'success'
+            };
+        case 4:
+            return {
+                name: '发现病毒',
                 color: 'danger'
+            };
+        case 5:
+            return {
+                name: '处理失败',
+                color: 'warning'
             };
         default:
             return {

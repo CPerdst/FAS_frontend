@@ -262,6 +262,7 @@ onMounted(() => {
           :data="sampleUploadData.sampleList"
           border
           style="width: 100%"
+          :row-key="row => row.hash"
       >
         <template v-for="item of TABLE_SHOWN_COLUMNS">
           <template v-if="item.open">
@@ -274,7 +275,7 @@ onMounted(() => {
               </template>
               <template v-if="item.name === 'status'" #default="scope">
                 <div style="display: flex; align-items: center">
-                  <el-tag :type="scope.row.status.type">{{ scope.row.status.name }}</el-tag>
+                  <el-tag :type="scope.row.status.color">{{ scope.row.status.name }}</el-tag>
                 </div>
               </template>
             </el-table-column>
