@@ -2,7 +2,7 @@
 
 import {
   computed,
-  onMounted,
+  onMounted, onUnmounted,
   reactive, ref
 } from "vue";
 
@@ -38,6 +38,7 @@ const sampleUploadData = reactive({
     pageSize: 10,
     total: 0
   },
+  intervalId: null
 });
 
 function beforeUpload(rawFile) {
@@ -50,9 +51,7 @@ function beforeUpload(rawFile) {
 
 function handleSuccess(res, file) {
   // 上传成功后刷新列表
-  // fetchSampleList();
-
-  console.log(res);
+  fetchSampleList();
 
   // 保留本地记录（可选）
   sampleUploadData.uploadedFiles.unshift({
@@ -152,6 +151,10 @@ SAMPLE_UPLOAD_FORM_PROPS['before-upload'] = beforeUpload;
 
 const uploadRef = ref(null);
 
+/**
+ * 异步更新样本提交历史记录
+ * @returns {Promise<void>}
+ */
 async function fetchSampleList() {
   sampleUploadData.loading = true;
   const response = await apiClient.get(FETCH_SAMPLE_URL, {
@@ -161,27 +164,27 @@ async function fetchSampleList() {
     }
   });
 
-  sampleUploadData.sampleList = response.data.data.list;
-  sampleUploadData.pagination.total = response.data.data.total;
-  // console.log(JSON.stringify(response.data.data, null, 2))
+  if(response.data?.data?.list) {
+    sampleUploadData.sampleList = response.data.data.list.map(item => ({
+      id: item.id,
+      name: item.filename,
+      size: getKBFormatedSize(item.fileSize),
+      status: getStatusName(item.disposeStatus),
+      date: getFormatedDate(getTimeBuArrayTimeFormat(item.createTime)),
+      hash: item.fileMd5
+    }));
+    sampleUploadData.pagination.total = response.data.data.total;
+  }
 
-  // 转换数据格式适配表格
-  sampleUploadData.sampleList = sampleUploadData.sampleList.map(item => ({
-    name: item.filename,
-    size: getKBFormatedSize(item.fileSize),
-    status: getStatusName(item.disposeStatus),
-    date: getFormatedDate(getTimeBuArrayTimeFormat(item.createTime)),
-    hash: item.fileMd5
-  }));
-
-  console.log(JSON.stringify(sampleUploadData.sampleList, null, 2))
+  console.log(sampleUploadData.sampleList.length)
 
   sampleUploadData.loading = false;
 }
 
 function handleSizeChange(newSize) {
-  this.pagination.pageSize = newSize;
-  this.fetchSampleList();
+  sampleUploadData.pagination.pageSize = newSize;
+  sampleUploadData.pagination.pageNum = 1; // 必须重置页码
+  fetchSampleList();
 }
 
 onMounted(() => {
@@ -189,12 +192,18 @@ onMounted(() => {
   fetchSampleList()
 
   // 添加样本上传数据到json面板
-  addPropsToJsonPanel('fileList', computed(() => {return uploadRef.value?.fileList;}));
-  addPropsToJsonPanel('uploadRef', computed(() => uploadRef));
+  addPropsToJsonPanel('sampleUploadData', computed(() => sampleUploadData));
 
   // 设置定时每5秒执行一次fetch, 进行比对替换
-  // setInterval(() => {
-  // }, 5000);
+  sampleUploadData.intervalId = setInterval(() => {
+    // 获取样本提交历史记录
+    fetchSampleList()
+  }, 5000);
+});
+
+onUnmounted(() => {
+  // 移除定时器
+  clearInterval(sampleUploadData.intervalId);
 });
 
 </script>
@@ -262,24 +271,22 @@ onMounted(() => {
           :data="sampleUploadData.sampleList"
           border
           style="width: 100%"
-          :row-key="row => row.hash"
+          :row-key="row => row.id"
       >
         <template v-for="item of TABLE_SHOWN_COLUMNS">
-          <template v-if="item.open">
-            <el-table-column :prop="item.name" :label="item.title">
-              <template v-if="item.name === 'date'" #default="scope">
-                <div style="display: flex; align-items: center">
-                  <el-icon><Timer/></el-icon>
-                  <span style="margin-left: 10px">{{ scope.row.date }}</span>
-                </div>
-              </template>
-              <template v-if="item.name === 'status'" #default="scope">
-                <div style="display: flex; align-items: center">
-                  <el-tag :type="scope.row.status.color">{{ scope.row.status.name }}</el-tag>
-                </div>
-              </template>
-            </el-table-column>
-          </template>
+          <el-table-column v-if="item.open" :prop="item.name" :label="item.title">
+            <template v-if="item.name === 'date'" #default="scope">
+              <div style="display: flex; align-items: center">
+                <el-icon><Timer/></el-icon>
+                <span style="margin-left: 10px">{{ scope.row.date }}</span>
+              </div>
+            </template>
+            <template v-if="item.name === 'status'" #default="scope">
+              <div style="display: flex; align-items: center">
+                <el-tag :type="scope.row.status.color">{{ scope.row.status.name }}</el-tag>
+              </div>
+            </template>
+          </el-table-column>
         </template>
       </el-table>
       <el-pagination

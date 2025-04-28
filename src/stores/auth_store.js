@@ -15,6 +15,17 @@ export const auth_store = defineStore("auth_store", {
         getToken: state => state.token,
         isLoggedIn: state => state.token !== undefined && state.token !== null,
     },
+    computed: {
+        getUserInfo: function () {
+            return this.user;
+        },
+        getToken: function () {
+            return this.token;
+        },
+        isLoggedIn: function () {
+            return this.token !== undefined && this.token !== null;
+        },
+    },
     actions: {
         logout() {
             localStorage.removeItem("jwtToken");

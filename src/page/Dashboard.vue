@@ -136,7 +136,7 @@ function getBreadcrumbPath(path) {
           </el-breadcrumb>
         </template>
         <router-view style="flex: 1;"/>
-        <Footer
+        <Footer v-if="authStore.isLoggedIn"
             :author="constants.FOOTER.author"
             :social-links="constants.FOOTER.socialLinks"
             :time="constants.FOOTER.time"
