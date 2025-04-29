@@ -10,11 +10,11 @@ import {
   UploadFilled, Upload, Timer
 } from "@element-plus/icons-vue";
 import {
-  addPropsToJsonPanel, checkDateType,
+  addPropsToJsonPanel,
+  getDateByArrayTimeFormat,
   getFormatedDate,
   getKBFormatedSize,
   getStatusName,
-  getTimeBuArrayTimeFormat
 } from "../../utils/common_utils";
 import {
   FETCH_SAMPLE_URL,
@@ -170,7 +170,7 @@ async function fetchSampleList() {
       name: item.filename,
       size: getKBFormatedSize(item.fileSize),
       status: getStatusName(item.disposeStatus),
-      date: getFormatedDate(getTimeBuArrayTimeFormat(item.createTime)),
+      date: getFormatedDate(getDateByArrayTimeFormat(item.createTime)),
       hash: item.fileMd5
     }));
     sampleUploadData.pagination.total = response.data.data.total;

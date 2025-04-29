@@ -4,10 +4,11 @@ import {
     Upload,
     House,
     MostlyCloudy,
-    Document, Lock
+    Document, Lock, Download
 } from '@element-plus/icons-vue'
 
 import {
+    h,
     reactive
 } from "vue";
 
@@ -15,6 +16,7 @@ import UserSettingTab from "../components/v1/UserSettingTab.vue";
 import {
     faGithub
 } from "@fortawesome/free-brands-svg-icons";
+import {ElButton} from "element-plus";
 
 // ======================================================================================================================
 // 固定常量
@@ -46,7 +48,9 @@ export const UPDATE_USER_URL = import.meta.env.VITE_BASE_URL + '/api/user/update
 
 export const SAMPLE_UPLOAD_URL = import.meta.env.VITE_BASE_URL + '/api/file/sample/upload';
 
-export const FETCH_SAMPLE_URL = import.meta.env.VITE_BASE_URL + '/api/file/sample/list';
+export const FETCH_SAMPLE_URL = import.meta.env.VITE_BASE_URL + '/api/sample/list';
+
+export const FETCH_SAMPLE_REPORT_URL = import.meta.env.VITE_BASE_URL + '/api/report/list';
 
 export const MAX_SAMPLE_SIZE = 1024 * 1024 * 50; // 50MB
 
@@ -267,6 +271,50 @@ export const settingTableList = [
 ];
 
 // ======================================================================================================================
+// 自定义 VNode 组件
+// ======================================================================================================================
+
+const ReportTableDownloadVNode = (row) => h(
+    ElButton,
+    {
+        type: 'primary',
+        size: 'small',
+        icon: Download,
+        onClick: () => {
+            console.log(`点击了下载 ${JSON.stringify(row, null, 2)}`);
+            const a = document.createElement('a');
+            a.href = row.pdfPath;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            a.click();
+        }
+    },
+    () => {return '下载';}
+);
+
+const ReportTableViewVNode = () =>  h(
+    ElButton,
+    {
+        type: 'warning',
+        size: 'small',
+        icon: Document,
+        onClick: () => {
+            console.log('点击了查看')
+        }
+    },
+    () => {return '查看';}
+)
+
+const ReportTableOperationVNode = (row, index, column) => h(
+    'div',
+    {
+        class: 'report-table-operation',
+        style: "display: flex; align-items: center;  justify-content: center;"
+    },
+    [ReportTableDownloadVNode(row), ReportTableViewVNode()]
+);
+
+// ======================================================================================================================
 // 页脚信息
 // ======================================================================================================================
 
@@ -314,6 +362,58 @@ export const SAMPLE_UPLOAD_FORM_PROPS = {
 
 export const JSON_PANEL_PROPS = reactive({
     data: {}
+});
+
+export const SAMPLE_REPORT_TABLE_PROPS = reactive({
+    pagination: {},
+    tableCol: [
+        {
+            label: 'ID',
+            prop: 'id',
+            otherProps: {
+                'show-overflow-tooltip': true,
+                width: '60'
+            }
+        },
+        {
+            label: '样本哈希',
+            prop: 'fileMd5',
+            otherProps: {
+                'show-overflow-tooltip': true,
+            }
+        },
+        {
+            label: '报告大小',
+            prop: 'pdfSize',
+            otherProps: {
+                'show-overflow-tooltip': true,
+                width: '100',
+            }
+        },
+        {
+            label: '报告生成时间',
+            prop: 'pdfCreateTime',
+            otherProps: {
+                'show-overflow-tooltip': true,
+                width: '155',
+            }
+        },
+        {
+            label: '操作',
+            prop: 'action',
+            otherProps: {
+                width: '200',
+            },
+            render: (row, index, column) => {
+                return ReportTableOperationVNode(row, index, column);
+            }
+        }
+    ],
+    otherTableProps: {
+        stripe: true,
+        border: true,
+        style: "width: 100%",
+    }
 });
 
 

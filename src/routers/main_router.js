@@ -5,6 +5,7 @@ import Dashboard from "../page/Dashboard.vue"
 import {auth_store} from "../stores/auth_store";
 import MainPage from "../components/dashboard/MainPage.vue";
 import reportView from "../components/v1/ReportView.vue";
+import SampleReportView from "../components/v1/SampleReportView.vue";
 import UserSettings from "../components/dashboard/UserSettings.vue";
 import SampleUpload from '../components/v1/SampleUpload.vue';
 import SampleUploadOld from '../components/dashboard/SampleUpload.vue';
@@ -104,7 +105,7 @@ const routes = [
             {
                 path: 'reportView',
                 name: 'reportView',
-                component: reportView,
+                component: SampleReportView,
                 meta: {requiresAuth: true},
             },
             {

@@ -57,11 +57,21 @@ export function getStatusName(status) {
     }
 }
 
-export function getTimeBuArrayTimeFormat (arrayTime) {
+export function getDateByArrayTimeFormat (arrayTime) {
     const year = arrayTime[0];
     const month = arrayTime[1];
     const day = arrayTime[2];
     return new Date(year, month - 1, day);
+}
+
+export function getDatetimeByArrayTimeFormat (arrayTime) {
+    const year = arrayTime[0];
+    const month = arrayTime[1];
+    const day = arrayTime[2];
+    const hour = arrayTime[3];
+    const minute = arrayTime[4];
+    const second = arrayTime[5];
+    return new Date(year, month - 1, day, hour, minute, second).toLocaleString();
 }
 
 export function getFormatedDate(date) {
