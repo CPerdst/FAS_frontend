@@ -6,13 +6,11 @@ import * as constants from '../utils/constant';
 import Aside from "../components/v1/Aside.vue";
 
 import {
-  onMounted, ref
+  computed, onMounted, ref
 } from "vue";
 
 import {
-  ASIDE_FOOTER,
-  AUTH_PANEL_SWITCH, HEADER_HEIGHT,
-  LOGIN_PANEL_URL, settingTableList
+  HEADER_HEIGHT, LOGIN_PANEL_URL
 } from "../utils/constant";
 
 import {
@@ -23,11 +21,10 @@ import {
   useRoute, useRouter
 } from "vue-router";
 
-import {
-  ArrowUp, ArrowDown
-} from "@element-plus/icons-vue";
 import SettingTable from "../components/v1/SettingTable.vue";
-import VueJsonPretty from "vue-json-pretty";
+import Footer from "../components/v1/Footer.vue";
+import JsonVIew from "../components/v1/tool/JsonVIew.vue";
+import {addPropsToJsonPanel, removePropsFromJsonPanel} from "../utils/common_utils";
 
 const router = useRouter();
 const route = useRoute();
@@ -68,15 +65,45 @@ onMounted(() => {
   }
   const headerHeightNum = parseFloat(HEADER_HEIGHT);
   shellHeight.value = window.innerHeight - headerHeightNum;
+
+  // 添加用户信息监视
+  addPropsToJsonPanel('user', computed(() => {return auth_store().user;}));
+  addPropsToJsonPanel('token', computed(() => {return auth_store().token;}));
+  addPropsToJsonPanel('redirectPath', computed(() => {return auth_store().redirectPath;}));
 });
 
-// =======================
-// 底部边栏
-// =======================
-const isExpanded = ref(false);
-const togglePanel = () => {
-  isExpanded.value = !isExpanded.value;
-};
+/**
+ * 根据路由获取标题
+ * @param path
+ */
+function getBreadcrumbPath(path) {
+  const split = path.split('/');
+  const suffix = split[split.length - 1];
+  const breadcrumbList = [];
+
+  for(const item of constants.panelMenu) {
+    if(item.name === suffix) {
+      breadcrumbList.push(item.title);
+      break;
+    }
+    let flag = false;
+    if(item.submenu) {
+      for(const subItem of item.submenu) {
+        if(subItem.name === suffix) {
+          breadcrumbList.push(item.title, subItem.title);
+          flag = true;
+        }
+      }
+    }
+    if(flag) {
+      break;
+    }
+    breadcrumbList.pop()
+  }
+
+  console.log('breadcrumbList', breadcrumbList)
+  return breadcrumbList;
+}
 
 </script>
 
@@ -99,9 +126,21 @@ const togglePanel = () => {
         />
       </template>
       <el-container class="main-content" :style="{
-        padding: '0 20px',
+        padding: '0 0',
       }">
-        <router-view/>
+        <template v-if="route.path !== '/dashboard/login' && route.path !== '/dashboard/register'">
+          <el-breadcrumb separator="/" class="breadcrumb">
+            <template v-for="(item, index) in getBreadcrumbPath(route.path)">
+              <el-breadcrumb-item>{{ item }}</el-breadcrumb-item>
+            </template>
+          </el-breadcrumb>
+        </template>
+        <router-view style="flex: 1;"/>
+        <Footer v-if="authStore.isLoggedIn"
+            :author="constants.FOOTER.author"
+            :social-links="constants.FOOTER.socialLinks"
+            :time="constants.FOOTER.time"
+        />
       </el-container>
     </el-container>
   </div>
@@ -114,33 +153,8 @@ const togglePanel = () => {
   >
     <SettingTable :SettingTableList="constants.settingTableList"/>
   </el-drawer>
-  <template v-if="constants.AUTH_PANEL_SWITCH">
-    <div class="state-panel" :class="{ 'expanded': isExpanded }">
-      <div class="panel-header">
-        <button class="panel-toggle-btn" @click="togglePanel">
-          <el-icon>
-            <ArrowDown v-if="isExpanded" />
-            <ArrowUp v-else />
-          </el-icon>
-        </button>
-      </div>
-      <div class="panel-content" v-if="isExpanded">
-        <el-divider border-style="solid" />
-        <div class="user-setting-panel" style="background-color: #ffffff">
-          <VueJsonPretty
-              :data="{
-                user: authStore.user,
-                token: authStore.token,
-                redirectPath: authStore.redirectPath,
-              }"
-              :deep="3"
-              showLength
-              highlightMouseover
-              class="json-viewer"
-          />
-        </div>
-      </div>
-    </div>
+  <template v-if="constants.JSON_VIEW_SWITCH">
+    <JsonVIew :JsonPanel="constants.JSON_PANEL_PROPS"/>
   </template>
 </template>
 

@@ -1,10 +1,5 @@
 <template>
   <div class="enhanced-upload">
-    <el-breadcrumb separator="/" class="breadcrumb">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>文件上传</el-breadcrumb-item>
-    </el-breadcrumb>
-
     <div class="main-container">
       <!-- 上传表单区域 -->
       <el-card shadow="hover" class="upload-card">
@@ -148,6 +143,7 @@
 <script>
 import { UploadFilled, Upload } from '@element-plus/icons-vue'
 import apiClient from "../../utils/asiox_instance";
+import {getStatusName} from "../../utils/common_utils";
 
 export default {
   name: 'EnhancedUpload',
@@ -201,13 +197,12 @@ export default {
         this.sampleList = this.sampleList.map(item => ({
           name: item.filename,
           size: item.fileSize,
-          status: item.status || 'pending',
-          uploadTime: item.createTime,
+          status: getStatusName(item.status),
+          createTime: item.createTime,
           hash: item.fileMd5
         }));
 
       this.loading = false;
-
     },
     // 新增上传处理方法
     async handleHttpRequest(options) {
@@ -313,7 +308,7 @@ export default {
 
 <style scoped>
 .enhanced-upload {
-  padding: 24px;
+  padding: 0 24px;
   max-width: 1200px;
   margin: 0 auto;
 }

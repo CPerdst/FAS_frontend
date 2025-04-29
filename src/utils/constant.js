@@ -4,23 +4,35 @@ import {
     Upload,
     House,
     MostlyCloudy,
-    Document, Lock
+    Document, Lock, Download
 } from '@element-plus/icons-vue'
 
+import {
+    h,
+    reactive
+} from "vue";
+
 import UserSettingTab from "../components/v1/UserSettingTab.vue";
+import {
+    faGithub
+} from "@fortawesome/free-brands-svg-icons";
+import {ElButton} from "element-plus";
 
 // ======================================================================================================================
 // 固定常量
 // ======================================================================================================================
 
+/**
+ * 作者
+ * @type {string}
+ */
 export const AUTHOR = 'l1Akr';
 
-export const AUTHOR_GITHUB = 'https://github.com/CPerdst';
-
-export const ASIDE_FOOTER = {
-    author: AUTHOR,
-    github: AUTHOR_GITHUB
-}
+/**
+ * 作者GitHub
+ * @type {string}
+ */
+export const AUTHOR_GITHUB = 'https://github.com/CPerdst/FAS_frontend';
 
 export const fast_timeout = 3000 // 三秒
 
@@ -33,6 +45,14 @@ export const DEFAULT_USER_AVATAR = 'https://cube.elemecdn.com/3/7c/3ea6beec64369
 export const AVATAR_UPLOAD_URL = import.meta.env.VITE_BASE_URL + '/api/file/avatar/upload';
 
 export const UPDATE_USER_URL = import.meta.env.VITE_BASE_URL + '/api/user/update';
+
+export const SAMPLE_UPLOAD_URL = import.meta.env.VITE_BASE_URL + '/api/file/sample/upload';
+
+export const FETCH_SAMPLE_URL = import.meta.env.VITE_BASE_URL + '/api/sample/list';
+
+export const FETCH_SAMPLE_REPORT_URL = import.meta.env.VITE_BASE_URL + '/api/report/list';
+
+export const MAX_SAMPLE_SIZE = 1024 * 1024 * 50; // 50MB
 
 // ======================================================================================================================
 // VUE面板路由
@@ -102,9 +122,13 @@ export const HEADER_TITLE = 'FAS';
  * 用于展示authStore的面板，dev环境自动打开
  * @type {boolean}
  */
-export const AUTH_PANEL_SWITCH = true ? import.meta.env.MODE === 'development' : false;
+export const AUTH_PANEL_SWITCH = false ? import.meta.env.MODE === 'development' : false;
+
+export const JSON_VIEW_SWITCH = true ? import.meta.env.MODE === 'development' : false;
 
 export const USER_SETTING_PANEL_SWITCH = true ? import.meta.env.MODE === 'development' : false;
+
+export const ASIDE_FOOTER_SWITCH = false;
 
 
 // ======================================================================================================================
@@ -137,7 +161,7 @@ export const panelMenu = [
             }
         ]
     }
-]
+];
 
 export const userDropDownBoxOption = [
     {
@@ -158,7 +182,7 @@ export const userDropDownBoxOption = [
             console.log('点击了退出登录')
         }
     }
-]
+];
 
 export const settingTableList = [
     {
@@ -244,4 +268,198 @@ export const settingTableList = [
         name: 'second',
         component: UserSettingTab
     }
+];
+
+// ======================================================================================================================
+// 自定义 VNode 组件
+// ======================================================================================================================
+
+const ReportTableDownloadVNode = (row) => h(
+    ElButton,
+    {
+        type: 'primary',
+        size: 'small',
+        icon: Download,
+        onClick: () => {
+            console.log(`点击了下载 ${JSON.stringify(row, null, 2)}`);
+            const a = document.createElement('a');
+            a.href = row.pdfPath;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            a.click();
+        }
+    },
+    () => {return '下载';}
+);
+
+const ReportTableViewVNode = () =>  h(
+    ElButton,
+    {
+        type: 'warning',
+        size: 'small',
+        icon: Document,
+        onClick: () => {
+            console.log('点击了查看')
+        }
+    },
+    () => {return '查看';}
+)
+
+const ReportTableOperationVNode = (row, index, column) => h(
+    'div',
+    {
+        class: 'report-table-operation',
+        style: "display: flex; align-items: center;  justify-content: center;"
+    },
+    [ReportTableDownloadVNode(row), ReportTableViewVNode()]
+);
+
+// ======================================================================================================================
+// 页脚信息
+// ======================================================================================================================
+
+/**
+ * Aside 页脚信息
+ * @type {{author: string, github: string}}
+ */
+export const ASIDE_FOOTER = {
+    author: AUTHOR,
+    github: AUTHOR_GITHUB
+};
+
+/**
+ * 页脚信息
+ * @type {{author: string, socialLinks: [{icon: IconDefinition, title: string, url: string}], time: boolean}}
+ */
+export const FOOTER = {
+    author: AUTHOR,
+    socialLinks: [
+        {
+            icon: faGithub,
+            title: 'github',
+            url: AUTHOR_GITHUB
+        }
+    ],
+    time: true // 用于开启时间戳
+};
+
+// ======================================================================================================================
+// 其他组件的参数
+// ======================================================================================================================
+
+export const SAMPLE_UPLOAD_FORM_PROPS = {
+    'http-request':     null,
+    'auto-upload':      false,
+    'before-upload':    null,
+    'on-success':       null,
+    'on-remove':        null,
+    'on-change':        null,
+    'on-preview':       null,
+    'on-exceed':        null,
+    limit: 10,              // 默认限制上传数量
+    'file-list': []
+};
+
+export const JSON_PANEL_PROPS = reactive({
+    data: {}
+});
+
+export const SAMPLE_REPORT_TABLE_PROPS = reactive({
+    pagination: {},
+    tableCol: [
+        {
+            label: 'ID',
+            prop: 'id',
+            otherProps: {
+                'show-overflow-tooltip': true,
+                width: '60'
+            }
+        },
+        {
+            label: '样本哈希',
+            prop: 'fileMd5',
+            otherProps: {
+                'show-overflow-tooltip': true,
+            }
+        },
+        {
+            label: '报告大小',
+            prop: 'pdfSize',
+            otherProps: {
+                'show-overflow-tooltip': true,
+                width: '100',
+            }
+        },
+        {
+            label: '报告生成时间',
+            prop: 'pdfCreateTime',
+            otherProps: {
+                'show-overflow-tooltip': true,
+                width: '155',
+            }
+        },
+        {
+            label: '操作',
+            prop: 'action',
+            otherProps: {
+                width: '200',
+            },
+            render: (row, index, column) => {
+                return ReportTableOperationVNode(row, index, column);
+            }
+        }
+    ],
+    otherTableProps: {
+        stripe: true,
+        border: true,
+        style: "width: 100%",
+    }
+});
+
+
+
+// ======================================================================================================================
+// 列表
+// ======================================================================================================================
+
+export const TABLE_SHOWN_COLUMNS = [
+    {
+        name: 'name',
+        title: '文件名',
+        open: false,
+        rowList: []
+    },
+    {
+        name: 'date',
+        title: '上传时间',
+        open: true,
+    },
+    {
+        name: 'hash',
+        title: '文件哈希值',
+        open: true,
+    },
+    {
+        name: 'status',
+        title: '状态',
+        open: true,
+    },
+    {
+        name: 'size',
+        title: '文件大小',
+        open: true,
+        rowList: []
+    },
+    {
+        name: 'type',
+        title: '文件类型',
+        open: false,
+        rowList: []
+    },
+    {
+        name: 'download_url',
+        title: '下载地址',
+        open: false,
+    },
+
 ]

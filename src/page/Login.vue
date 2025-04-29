@@ -72,10 +72,10 @@ async function confirm() {
         loginLoading.close();
 
         if(response.data.code !== 0) {
-          loginFormRef.loginForm.resetFields();
+          // loginFormRef.loginForm.resetFields();
           console.error("登录失败: ", JSON.stringify(response.data, null, 2));
           ElMessage.error('登录失败: ' + response.data.message)
-          // loginFormRef.loginForm.resetFields(['password']);
+          loginFormRef.value.resetFields(['password']);
           return;
         }
 
