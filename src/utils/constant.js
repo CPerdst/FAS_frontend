@@ -16,7 +16,8 @@ import UserSettingTab from "../components/v1/UserSettingTab.vue";
 import {
     faGithub
 } from "@fortawesome/free-brands-svg-icons";
-import {ElButton} from "element-plus";
+import {ElButton, ElTag} from "element-plus";
+import VuePdfApp from "vue3-pdf-app"
 
 // ======================================================================================================================
 // 固定常量
@@ -368,18 +369,48 @@ export const SAMPLE_REPORT_TABLE_PROPS = reactive({
     pagination: {},
     tableCol: [
         {
+            otherProps: {
+                type: 'expand'
+            },
+            render: (scope) => {
+                return h(
+                    'div',
+                    {
+                        class: "pdf-container"
+                    },
+                    h(
+                        VuePdfApp,
+                        {
+                            class: "pdf-box",
+                            pdf: scope.row.pdfPath
+                        }
+                    )
+                );
+            }
+        },
+        {
             label: 'ID',
             prop: 'id',
             otherProps: {
                 'show-overflow-tooltip': true,
-                width: '60'
+                width: '60',
+                'header-align': 'center'
+            },
+            render: ({row}) => {
+                return h(
+                    'div',
+                    {
+                        style: 'display: flex; align-items: center;  justify-content: center;'
+                    },
+                    row.id
+                )
             }
         },
         {
             label: '样本哈希',
             prop: 'fileMd5',
             otherProps: {
-                'show-overflow-tooltip': true,
+                'show-overflow-tooltip': true
             }
         },
         {
@@ -388,6 +419,16 @@ export const SAMPLE_REPORT_TABLE_PROPS = reactive({
             otherProps: {
                 'show-overflow-tooltip': true,
                 width: '100',
+                'header-align': 'center'
+            },
+            render: ({row}) => {
+                return h(
+                    'div',
+                    {
+                        style: 'display: flex; align-items: center;  justify-content: center;'
+                    },
+                    row.pdfSize
+                )
             }
         },
         {
@@ -396,6 +437,16 @@ export const SAMPLE_REPORT_TABLE_PROPS = reactive({
             otherProps: {
                 'show-overflow-tooltip': true,
                 width: '155',
+                'header-align': 'center'
+            },
+            render: ({row}) => {
+                return h(
+                    'div',
+                    {
+                        style: 'display: flex; align-items: center;  justify-content: center;'
+                    },
+                    row.pdfCreateTime
+                )
             }
         },
         {
@@ -403,9 +454,10 @@ export const SAMPLE_REPORT_TABLE_PROPS = reactive({
             prop: 'action',
             otherProps: {
                 width: '200',
+                'header-align': 'center'
             },
-            render: (row, index, column) => {
-                return ReportTableOperationVNode(row, index, column);
+            render: (scope) => {
+                return ReportTableOperationVNode(scope.row, scope.$index, scope.column);
             }
         }
     ],
@@ -424,41 +476,106 @@ export const SAMPLE_REPORT_TABLE_PROPS = reactive({
 
 export const TABLE_SHOWN_COLUMNS = [
     {
-        name: 'name',
-        title: '文件名',
+        prop: 'id',
+        label: 'ID',
+        open: true,
+        otherProps: {
+            'show-overflow-tooltip': true,
+            width: '60',
+            'header-align': 'center'
+        },
+        render: ({row}) => {
+            return h(
+                'div',
+                {
+                    style: 'display: flex; align-items: center;  justify-content: center;'
+                },
+                row.id
+            )
+        }
+    },
+    {
+        prop: 'name',
+        label: '文件名',
+        open: false,
+    },
+    {
+        prop: 'date',
+        label: '上传时间',
+        open: true,
+        otherProps: {
+            'show-overflow-tooltip': true,
+            width: '150',
+            'header-align': 'center'
+        },
+        render: ({row}) => {
+            return h(
+                'div',
+                {
+                    style: 'display: flex; align-items: center;  justify-content: center;'
+                },
+                row.date
+            )
+        }
+    },
+    {
+        prop: 'hash',
+        label: '文件哈希值',
+        open: true,
+    },
+    {
+        prop: 'status',
+        label: '状态',
+        open: true,
+        otherProps: {
+            'show-overflow-tooltip': true,
+            width: '120',
+            'header-align': 'center'
+        },
+        render: ({row}) => {
+            return h(
+                'div',
+                {
+                    style: 'display: flex; align-items: center;  justify-content: center;'
+                },
+                h(
+                    ElTag,
+                    {
+                        type: row.status.color,
+                    },
+                    row.status.name
+                )
+            )
+        }
+    },
+    {
+        prop: 'size',
+        label: '文件大小',
+        open: true,
+        otherProps: {
+            'show-overflow-tooltip': true,
+            width: '150',
+            'header-align': 'center'
+        },
+        render: ({row}) => {
+            return h(
+                'div',
+                {
+                    style: 'display: flex; align-items: center;  justify-content: center;'
+                },
+                row.size
+            )
+        }
+    },
+    {
+        prop: 'type',
+        label: '文件类型',
         open: false,
         rowList: []
     },
     {
-        name: 'date',
-        title: '上传时间',
-        open: true,
-    },
-    {
-        name: 'hash',
-        title: '文件哈希值',
-        open: true,
-    },
-    {
-        name: 'status',
-        title: '状态',
-        open: true,
-    },
-    {
-        name: 'size',
-        title: '文件大小',
-        open: true,
-        rowList: []
-    },
-    {
-        name: 'type',
-        title: '文件类型',
-        open: false,
-        rowList: []
-    },
-    {
-        name: 'download_url',
-        title: '下载地址',
+        prop: 'download_url',
+        label: '下载地址',
         open: false,
     },
 

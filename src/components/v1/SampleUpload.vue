@@ -274,17 +274,9 @@ onUnmounted(() => {
           :row-key="row => row.id"
       >
         <template v-for="item of TABLE_SHOWN_COLUMNS">
-          <el-table-column v-if="item.open" :prop="item.name" :label="item.title">
-            <template v-if="item.name === 'date'" #default="scope">
-              <div style="display: flex; align-items: center">
-                <el-icon><Timer/></el-icon>
-                <span style="margin-left: 10px">{{ scope.row.date }}</span>
-              </div>
-            </template>
-            <template v-if="item.name === 'status'" #default="scope">
-              <div style="display: flex; align-items: center">
-                <el-tag :type="scope.row.status.color">{{ scope.row.status.name }}</el-tag>
-              </div>
+          <el-table-column v-if="item.open" :prop="item.prop" :label="item.label" v-bind="item.otherProps">
+            <template v-if="item.render" #default="scope">
+              <component :is="item.render(scope)"/>
             </template>
           </el-table-column>
         </template>

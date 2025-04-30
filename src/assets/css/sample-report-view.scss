@@ -4,4 +4,20 @@
   .el-card {
     margin-bottom: 40px;
   }
+
+  .pdf-container {
+    width: 100%;
+    height: 600px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .pdf-box {
+      width: 66%;
+      height: 100%;
+      overflow: hidden;
+    }
+  }
+
 }

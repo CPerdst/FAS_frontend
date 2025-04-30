@@ -1,11 +1,12 @@
 <script setup>
 
-import {computed, onMounted, reactive, toRaw} from "vue";
+import {computed, onMounted, onUnmounted, reactive, ref, toRaw} from "vue";
 import {FETCH_SAMPLE_REPORT_URL, SAMPLE_REPORT_TABLE_PROPS} from "../../utils/constant";
 import {
   addPropsToJsonPanel, getDatetimeByArrayTimeFormat, getKBFormatedSize, getMBFormatedSize,
 } from "../../utils/common_utils";
 import apiClient from "../../utils/asiox_instance";
+import VuePdfApp from "vue3-pdf-app";
 
 /**
  * SampleInfoList: 样本信息列表
@@ -27,7 +28,8 @@ const sampleReportViewData = reactive({
     });
   }),
   reportTableColProps: computed(() => {return SAMPLE_REPORT_TABLE_PROPS.tableCol;}),
-  reportOtherTableProps: computed(() => {return SAMPLE_REPORT_TABLE_PROPS.otherTableProps})
+  reportOtherTableProps: computed(() => {return SAMPLE_REPORT_TABLE_PROPS.otherTableProps}),
+  intervalId: null
 });
 
 async function fetchSampleInfoList() {
@@ -45,13 +47,18 @@ onMounted(() => {
   // 首先获取一次样本信息列表
   fetchSampleInfoList();
   // 每5秒更新一次样本信息列表
-  setInterval(() => {
+  sampleReportViewData.intervalId = setInterval(() => {
     // 获取样本信息列表
     fetchSampleInfoList();
   }, 5000);
 
   // 添加样本信息列表到json面板
   addPropsToJsonPanel('sampleReportViewData', computed(() => SAMPLE_REPORT_TABLE_PROPS));
+});
+
+onUnmounted(() => {
+  // 删除fetch定时器
+  clearInterval(sampleReportViewData.intervalId);
 });
 
 </script>
@@ -68,7 +75,7 @@ onMounted(() => {
         <template v-for="(item, index) of sampleReportViewData.reportTableColProps">
           <el-table-column :prop="item.prop" :label="item.label" v-bind="item.otherProps">
             <template v-if="item.render" #default="scope">
-              <component :is="item.render(scope.row, scope.$index, scope.column)"/>
+              <component :is="item.render(scope)"/>
             </template>
           </el-table-column>
         </template>
