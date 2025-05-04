@@ -125,9 +125,9 @@ export const HEADER_TITLE = 'FAS';
  */
 export const AUTH_PANEL_SWITCH = false ? import.meta.env.MODE === 'development' : false;
 
-export const JSON_VIEW_SWITCH = true ? import.meta.env.MODE === 'development' : false;
+export const JSON_VIEW_SWITCH = false ? import.meta.env.MODE === 'development' : false;
 
-export const USER_SETTING_PANEL_SWITCH = true ? import.meta.env.MODE === 'development' : false;
+export const USER_SETTING_PANEL_SWITCH = false ? import.meta.env.MODE === 'development' : false;
 
 export const ASIDE_FOOTER_SWITCH = false;
 
@@ -365,108 +365,7 @@ export const JSON_PANEL_PROPS = reactive({
     data: {}
 });
 
-export const SAMPLE_REPORT_TABLE_PROPS = reactive({
-    pagination: {},
-    tableCol: [
-        {
-            otherProps: {
-                type: 'expand'
-            },
-            render: (scope) => {
-                return h(
-                    'div',
-                    {
-                        class: "pdf-container"
-                    },
-                    h(
-                        VuePdfApp,
-                        {
-                            class: "pdf-box",
-                            pdf: scope.row.pdfPath
-                        }
-                    )
-                );
-            }
-        },
-        {
-            label: 'ID',
-            prop: 'id',
-            otherProps: {
-                'show-overflow-tooltip': true,
-                width: '60',
-                'header-align': 'center'
-            },
-            render: ({row}) => {
-                return h(
-                    'div',
-                    {
-                        style: 'display: flex; align-items: center;  justify-content: center;'
-                    },
-                    row.id
-                )
-            }
-        },
-        {
-            label: '样本哈希',
-            prop: 'fileMd5',
-            otherProps: {
-                'show-overflow-tooltip': true
-            }
-        },
-        {
-            label: '报告大小',
-            prop: 'pdfSize',
-            otherProps: {
-                'show-overflow-tooltip': true,
-                width: '100',
-                'header-align': 'center'
-            },
-            render: ({row}) => {
-                return h(
-                    'div',
-                    {
-                        style: 'display: flex; align-items: center;  justify-content: center;'
-                    },
-                    row.pdfSize
-                )
-            }
-        },
-        {
-            label: '报告生成时间',
-            prop: 'pdfCreateTime',
-            otherProps: {
-                'show-overflow-tooltip': true,
-                width: '155',
-                'header-align': 'center'
-            },
-            render: ({row}) => {
-                return h(
-                    'div',
-                    {
-                        style: 'display: flex; align-items: center;  justify-content: center;'
-                    },
-                    row.pdfCreateTime
-                )
-            }
-        },
-        {
-            label: '操作',
-            prop: 'action',
-            otherProps: {
-                width: '200',
-                'header-align': 'center'
-            },
-            render: (scope) => {
-                return ReportTableOperationVNode(scope.row, scope.$index, scope.column);
-            }
-        }
-    ],
-    otherTableProps: {
-        stripe: true,
-        border: true,
-        style: "width: 100%",
-    }
-});
+
 
 
 
@@ -580,3 +479,135 @@ export const TABLE_SHOWN_COLUMNS = [
     },
 
 ]
+
+// ======================================================================================================================
+// 页面属性响应变量
+// ======================================================================================================================
+
+/**
+ * 样本报告页表格属性
+ * @type {{pagination: {}, tableCol: [{otherProps: {type: string}, render: (function(*): VNode<RendererNode, RendererElement, {[p: string]: any}>)},{label: string, prop: string, otherProps: {"show-overflow-tooltip": boolean, width: string, "header-align": string}, render: (function({row: *}): VNode<RendererNode, RendererElement, {[p: string]: any}>)},{label: string, prop: string, otherProps: {"show-overflow-tooltip": boolean}},{label: string, prop: string, otherProps: {"show-overflow-tooltip": boolean, width: string, "header-align": string}, render: (function({row: *}): VNode<RendererNode, RendererElement, {[p: string]: any}>)},{label: string, prop: string, otherProps: {"show-overflow-tooltip": boolean, width: string, "header-align": string}, render: (function({row: *}): VNode<RendererNode, RendererElement, {[p: string]: any}>)},null], otherTableProps: {stripe: boolean, border: boolean, style: string}}}
+ */
+const SAMPLE_REPORT_TABLE_PROPS = {
+    tableCol: [
+        {
+            otherProps: {
+                type: 'expand'
+            },
+            render: (scope) => {
+                return h(
+                    'div',
+                    {
+                        class: "pdf-container"
+                    },
+                    h(
+                        VuePdfApp,
+                        {
+                            class: "pdf-box",
+                            pdf: scope.row.pdfPath
+                        }
+                    )
+                );
+            }
+        },
+        {
+            label: 'ID',
+            prop: 'id',
+            otherProps: {
+                'show-overflow-tooltip': true,
+                width: '60',
+                'header-align': 'center'
+            },
+            render: ({row}) => {
+                return h(
+                    'div',
+                    {
+                        style: 'display: flex; align-items: center;  justify-content: center;'
+                    },
+                    row.id
+                )
+            }
+        },
+        {
+            label: '样本哈希',
+            prop: 'fileMd5',
+            otherProps: {
+                'show-overflow-tooltip': true
+            }
+        },
+        {
+            label: '报告大小',
+            prop: 'pdfSize',
+            otherProps: {
+                'show-overflow-tooltip': true,
+                width: '100',
+                'header-align': 'center'
+            },
+            render: ({row}) => {
+                return h(
+                    'div',
+                    {
+                        style: 'display: flex; align-items: center;  justify-content: center;'
+                    },
+                    row.pdfSize
+                )
+            }
+        },
+        {
+            label: '报告生成时间',
+            prop: 'pdfCreateTime',
+            otherProps: {
+                'show-overflow-tooltip': true,
+                width: '155',
+                'header-align': 'center'
+            },
+            render: ({row}) => {
+                return h(
+                    'div',
+                    {
+                        style: 'display: flex; align-items: center;  justify-content: center;'
+                    },
+                    row.pdfCreateTime
+                )
+            }
+        },
+        {
+            label: '操作',
+            prop: 'action',
+            otherProps: {
+                width: '200',
+                'header-align': 'center'
+            },
+            render: (scope) => {
+                return ReportTableOperationVNode(scope.row, scope.$index, scope.column);
+            }
+        }
+    ],
+    otherTableProps: {
+        stripe: true,
+        border: true,
+        style: "width: 100%",
+    },
+    tableData: []
+};
+
+/**
+ * 样本报告页页脚属性
+ * @type {*[]}
+ */
+const SAMPLE_REPORT_FOOTER_PROPS = {
+    paginationProps: {
+        pageNum: 1,
+        pageSize: 10,
+        totalPages: 0
+    },
+};
+
+/**
+ * 样本报告页全局响应性属性
+ * @type {Reactive<{"sample-report-table-props": {pagination: {}, tableCol: [{otherProps: {type: string}, render: (function(*): VNode<RendererNode, RendererElement, {[p: string]: *}>)},{label: string, prop: string, otherProps: {"show-overflow-tooltip": boolean, width: string, "header-align": string}, render: (function({row: *}): VNode<RendererNode, RendererElement, {[p: string]: *}>)},{label: string, prop: string, otherProps: {"show-overflow-tooltip": boolean}},{label: string, prop: string, otherProps: {"show-overflow-tooltip": boolean, width: string, "header-align": string}, render: (function({row: *}): VNode<RendererNode, RendererElement, {[p: string]: *}>)},{label: string, prop: string, otherProps: {"show-overflow-tooltip": boolean, width: string, "header-align": string}, render: (function({row: *}): VNode<RendererNode, RendererElement, {[p: string]: *}>)},null], otherTableProps: {stripe: boolean, border: boolean, style: string}}, "sample-report-footer-props"}>}
+ */
+export const SAMPLE_REPORT_VIEW_REACTIVE_PROPS = reactive({
+    sampleReportTableProps: SAMPLE_REPORT_TABLE_PROPS,
+    sampleReportFooterProps: SAMPLE_REPORT_FOOTER_PROPS
+});

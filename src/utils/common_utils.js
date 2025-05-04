@@ -65,13 +65,16 @@ export function getDateByArrayTimeFormat (arrayTime) {
 }
 
 export function getDatetimeByArrayTimeFormat (arrayTime) {
+    if(arrayTime === undefined || arrayTime === null) {
+        return null;
+    }
     const year = arrayTime[0];
     const month = arrayTime[1];
     const day = arrayTime[2];
     const hour = arrayTime[3];
     const minute = arrayTime[4];
     const second = arrayTime[5];
-    return new Date(year, month - 1, day, hour, minute, second).toLocaleString();
+    return new Date(year, month - 1, day, hour, minute, second)
 }
 
 export function getFormatedDate(date) {

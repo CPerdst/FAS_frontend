@@ -176,8 +176,6 @@ async function fetchSampleList() {
     sampleUploadData.pagination.total = response.data.data.total;
   }
 
-  console.log(sampleUploadData.sampleList.length)
-
   sampleUploadData.loading = false;
 }
 

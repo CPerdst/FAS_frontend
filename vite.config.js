@@ -1,5 +1,6 @@
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue';
+import vueDevTools from 'vite-plugin-vue-devtools'
 
 export default defineConfig(({ command, mode }) => {
     const env = loadEnv(mode, process.cwd(), '')
@@ -21,6 +22,9 @@ export default defineConfig(({ command, mode }) => {
                 }
             }
         },
-        plugins: [vue()]
+        plugins: [
+            vue(),
+            vueDevTools(),
+        ]
     }
 })

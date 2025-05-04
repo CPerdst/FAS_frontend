@@ -1,12 +1,14 @@
 <script setup>
 
 import {computed, onMounted, onUnmounted, reactive, ref, toRaw} from "vue";
-import {FETCH_SAMPLE_REPORT_URL, SAMPLE_REPORT_TABLE_PROPS} from "../../utils/constant";
+import {
+  FETCH_SAMPLE_REPORT_URL,
+  SAMPLE_REPORT_VIEW_REACTIVE_PROPS
+} from "../../utils/constant";
 import {
   addPropsToJsonPanel, getDatetimeByArrayTimeFormat, getKBFormatedSize, getMBFormatedSize,
 } from "../../utils/common_utils";
 import apiClient from "../../utils/asiox_instance";
-import VuePdfApp from "vue3-pdf-app";
 
 /**
  * SampleInfoList: 样本信息列表
@@ -14,10 +16,8 @@ import VuePdfApp from "vue3-pdf-app";
  */
 const sampleReportViewData = reactive({
   sampleInfoList: computed(() => {
-    if(!SAMPLE_REPORT_TABLE_PROPS.pagination?.list) {
-      return [];
-    }
-    return SAMPLE_REPORT_TABLE_PROPS.pagination.list.map((item) => {
+    return SAMPLE_REPORT_VIEW_REACTIVE_PROPS.sampleReportTableProps.tableData.map((item) => {
+      console.log(item);
       return {
         id: item.id,
         fileMd5: item.fileMd5,
@@ -27,20 +27,30 @@ const sampleReportViewData = reactive({
       }
     });
   }),
-  reportTableColProps: computed(() => {return SAMPLE_REPORT_TABLE_PROPS.tableCol;}),
-  reportOtherTableProps: computed(() => {return SAMPLE_REPORT_TABLE_PROPS.otherTableProps}),
-  intervalId: null
+  reportTableColProps: computed(() => {return SAMPLE_REPORT_VIEW_REACTIVE_PROPS.sampleReportTableProps.tableCol;}),
+  reportOtherTableProps: computed(() => {return SAMPLE_REPORT_VIEW_REACTIVE_PROPS.sampleReportTableProps.otherTableProps}),
+  // 分页计算属性
+  sampleReportFooterProps: computed(() => {return SAMPLE_REPORT_VIEW_REACTIVE_PROPS.sampleReportFooterProps}),
+  intervalId: null,
 });
 
 async function fetchSampleInfoList() {
   const response = await apiClient.get(FETCH_SAMPLE_REPORT_URL,
       {params: {
-        pageNum: 1,
-        pageSize: 10
+        pageNum: SAMPLE_REPORT_VIEW_REACTIVE_PROPS.sampleReportFooterProps.paginationProps.pageNum,
+        pageSize: SAMPLE_REPORT_VIEW_REACTIVE_PROPS.sampleReportFooterProps.paginationProps.pageSize
       }}
   )
   // 更新 SAMPLE_REPORT_TABLE_PROPS.data
-  SAMPLE_REPORT_TABLE_PROPS.pagination = response.data.data;
+  SAMPLE_REPORT_VIEW_REACTIVE_PROPS.sampleReportFooterProps.paginationProps.totalPages = response.data.data.total;
+  SAMPLE_REPORT_VIEW_REACTIVE_PROPS.sampleReportFooterProps.paginationProps.pageNum = response.data.data.pageNum;
+  SAMPLE_REPORT_VIEW_REACTIVE_PROPS.sampleReportFooterProps.paginationProps.pageSize = response.data.data.pageSize;
+  SAMPLE_REPORT_VIEW_REACTIVE_PROPS.sampleReportTableProps.tableData = response.data.data.list;
+}
+
+function handleSizeChange(size) {
+  console.log(size);
+  fetchSampleInfoList();
 }
 
 onMounted(() => {
@@ -53,7 +63,7 @@ onMounted(() => {
   }, 5000);
 
   // 添加样本信息列表到json面板
-  addPropsToJsonPanel('sampleReportViewData', computed(() => SAMPLE_REPORT_TABLE_PROPS));
+  addPropsToJsonPanel('sampleReportViewData', computed(() => SAMPLE_REPORT_VIEW_REACTIVE_PROPS));
 });
 
 onUnmounted(() => {
@@ -81,8 +91,17 @@ onUnmounted(() => {
         </template>
       </el-table>
       <template #footer>
-        <div>
-          <span class="card-footer-title">样本信息列表</span>
+        <div class="card-footer-pagination" style="height: 200px">
+          <el-pagination
+              background
+              layout="prev, pager, next"
+              size="small"
+              :total="sampleReportViewData.sampleReportFooterProps.paginationProps.totalPages"
+              :page-size="sampleReportViewData.sampleReportFooterProps.paginationProps.pageSize"
+              v-model:current-page="sampleReportViewData.sampleReportFooterProps.paginationProps.pageNum"
+              @current-change="handleSizeChange"
+          />
+<!--          <span class="card-footer-title">样本信息列表</span>-->
         </div>
       </template>
     </el-card>
