@@ -74,7 +74,9 @@ export function getDatetimeByArrayTimeFormat (arrayTime) {
     const hour = arrayTime[3];
     const minute = arrayTime[4];
     const second = arrayTime[5];
-    return new Date(year, month - 1, day, hour, minute, second)
+    const date = new Date(year, month - 1, day, hour, minute, second);
+    console.log(date.toLocaleString());
+    return date.toLocaleString();
 }
 
 export function getFormatedDate(date) {

@@ -17,7 +17,6 @@ import apiClient from "../../utils/asiox_instance";
 const sampleReportViewData = reactive({
   sampleInfoList: computed(() => {
     return SAMPLE_REPORT_VIEW_REACTIVE_PROPS.sampleReportTableProps.tableData.map((item) => {
-      console.log(item);
       return {
         id: item.id,
         fileMd5: item.fileMd5,
@@ -91,17 +90,15 @@ onUnmounted(() => {
         </template>
       </el-table>
       <template #footer>
-        <div class="card-footer-pagination" style="height: 200px">
+        <div class="card-footer-pagination">
           <el-pagination
               background
               layout="prev, pager, next"
-              size="small"
               :total="sampleReportViewData.sampleReportFooterProps.paginationProps.totalPages"
               :page-size="sampleReportViewData.sampleReportFooterProps.paginationProps.pageSize"
               v-model:current-page="sampleReportViewData.sampleReportFooterProps.paginationProps.pageNum"
               @current-change="handleSizeChange"
           />
-<!--          <span class="card-footer-title">样本信息列表</span>-->
         </div>
       </template>
     </el-card>

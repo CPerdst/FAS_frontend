@@ -4,7 +4,7 @@ import {
     Upload,
     House,
     MostlyCloudy,
-    Document, Lock, Download
+    Document, Lock, Download, Calendar
 } from '@element-plus/icons-vue'
 
 import {
@@ -16,7 +16,7 @@ import UserSettingTab from "../components/v1/UserSettingTab.vue";
 import {
     faGithub
 } from "@fortawesome/free-brands-svg-icons";
-import {ElButton, ElTag} from "element-plus";
+import {dayjs, ElButton, ElIcon, ElTag} from "element-plus";
 import VuePdfApp from "vue3-pdf-app"
 
 // ======================================================================================================================
@@ -565,9 +565,18 @@ const SAMPLE_REPORT_TABLE_PROPS = {
                 return h(
                     'div',
                     {
-                        style: 'display: flex; align-items: center;  justify-content: center;'
+                        style: {
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '4px 0'
+                        }
                     },
-                    row.pdfCreateTime
+
+                    [
+                        h(ElIcon, { style: { marginRight: '6px' } }, () => h(Calendar)),
+                        h('span', { style: { color: '#606266' } }, dayjs(row.pdfCreateTime).format('YYYY-MM-DD HH:mm:ss'))
+                    ]
                 )
             }
         },
