@@ -9,6 +9,7 @@ import SampleReportView from "../components/v1/SampleReportView.vue";
 import UserSettings from "../components/dashboard/UserSettings.vue";
 import SampleUpload from '../components/v1/SampleUpload.vue';
 import SampleUploadOld from '../components/dashboard/SampleUpload.vue';
+import Main from '../page/Main.vue';
 
 /**
 
@@ -93,7 +94,7 @@ const routes = [
             {
                 path: 'main',
                 name: 'main',
-                component: MainPage,
+                component: Main,
                 meta: {requiresAuth: true},
             },
             {

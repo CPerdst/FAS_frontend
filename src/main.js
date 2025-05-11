@@ -11,6 +11,7 @@ import {
     faGithub, faWeibo
 } from "@fortawesome/free-brands-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import ECharts from 'vue-echarts'
 
 const pinia = createPinia({});
 pinia.use(piniaPluginPersistedstate);
@@ -22,5 +23,6 @@ app.use(router);
 app.use(pinia);
 library.add(faGithub);
 app.component('font-awesome-icon', FontAwesomeIcon);
+app.component('v-chart', ECharts);
 
 app.mount('#app');
