@@ -53,7 +53,9 @@ export const FETCH_SAMPLE_URL = import.meta.env.VITE_BASE_URL + '/api/sample/lis
 
 export const FETCH_SAMPLE_REPORT_URL = import.meta.env.VITE_BASE_URL + '/api/report/list';
 
-export const FETCH_CHART_DATASET_URL = import.meta.env.VITE_BASE_URL + '/api/sample/history';
+export const FETCH_CHART_DATASET_URL = import.meta.env.VITE_BASE_URL + '/api/sample/allHistory';
+
+export const FETCH_CHART_LINE_DATASET_URL = import.meta.env.VITE_BASE_URL + '/api/sample/lineHistory';
 
 export const MAX_SAMPLE_SIZE = 1024 * 1024 * 50; // 50MB
 

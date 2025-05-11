@@ -81,7 +81,7 @@ const sampleCountChartData = reactive({
         <div style="font-weight:bold">${params.name}</div>
         <div>数量: ${params.value}</div>
         <div>占比: ${params.percent}%</div>
-        <div>总数: ${totalProp}</div>
+        <div>总数: ${totalProp.value}</div>
       `;
       }
     },

@@ -5,7 +5,8 @@ import {
 import SampleCountChart from "../components/v1/chart/SampleCountChart.vue";
 import {auth_store} from "../stores/auth_store";
 import apiClient from "../utils/asiox_instance";
-import {FETCH_CHART_DATASET_URL} from "../utils/constant";
+import {FETCH_CHART_DATASET_URL, FETCH_CHART_LINE_DATASET_URL} from "../utils/constant";
+import SampleUploadHistoryChart from "../components/v1/chart/SampleUploadHistoryChart.vue";
 
 const sampleCountChartData = ref([
   { value: 0, name: '未处理', status: 1 },
@@ -16,6 +17,10 @@ const sampleCountChartData = ref([
 ]);
 
 const total = ref(0);
+
+const date = ref([]);
+
+const counts = ref([]);
 
 async function getPieDataset() {
   const response = await apiClient(
@@ -43,9 +48,35 @@ async function getPieDataset() {
   total.value = sampleCountChartData.value.reduce((sum, item) => sum + item.value, 0);
 }
 
+async function getLineDataset() {
+  const response = await apiClient(
+      FETCH_CHART_LINE_DATASET_URL,
+      {
+        data: {
+          days: 10
+        },
+        method: 'get',
+      }
+  );
+
+  date.value = response.data.data.map(item => {
+    const [year, month, day] = item.date;
+    return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  });
+
+  counts.value = response.data.data.map(item => {
+    return item.total;
+  });
+
+  // console.log(response);
+}
+
 onMounted(() => {
   // 获取样本饼图数据集
   getPieDataset();
+
+  // 获取样本折线图数据
+  getLineDataset();
 });
 
 
@@ -55,9 +86,16 @@ onMounted(() => {
 <template>
   <div class="main-page-container">
     <SampleCountChart
-      :sample-data="sampleCountChartData"
-      :total="total"
+        class="main-page-sample-count-chart"
+        :sample-data="sampleCountChartData"
+        :total="total"
     ></SampleCountChart>
+
+    <SampleUploadHistoryChart
+        class="main-page-sample-upload-history-chart"
+        :dates="date"
+        :counts="counts"
+    ></SampleUploadHistoryChart>
   </div>
 </template>
 
