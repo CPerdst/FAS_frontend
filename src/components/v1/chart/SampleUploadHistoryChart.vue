@@ -1,6 +1,6 @@
 <script setup>
 import VChart from 'vue-echarts';
-import { use } from 'echarts/core';
+import {use} from 'echarts/core';
 import {
   SVGRenderer
 } from 'echarts/renderers';
@@ -12,12 +12,13 @@ import {
   TooltipComponent,
   TitleComponent,
   LegendComponent,
-    GraphicComponent
+  GraphicComponent
 } from 'echarts/components';
 import {
   computed,
-  defineProps, onMounted, watch, toRef
+  defineProps, onMounted, watch, toRef, ref, onUnmounted
 } from 'vue';
+import {debounce} from 'lodash-es';
 
 use([
   SVGRenderer,
@@ -162,17 +163,61 @@ const option = computed(() => ({
         color: 'rgba(238, 238, 238, 0.3)'
       },
       data: [[
-        { coord: ['0%', '0%'] },
-        { coord: ['100%', '100%'] }
+        {coord: ['0%', '0%']},
+        {coord: ['100%', '100%']}
       ]]
     } : null
   }]
 }));
+
+const selectedDays = ref(30);
+
+const emit = defineEmits([
+  'days-change'   // 声明自定义事件
+]);
+
+const dayOption = [
+  {value: 7, label: "最近7天"},
+  {value: 30, label: "最近30天"},
+  {value: 90, label: "最近90天"},
+]
+
+const chartRef = ref(null); // 添加chart引用
+
+const handleResize = debounce(() => {
+  if (chartRef.value && chartRef.value.resize) {
+    chartRef.value.resize();
+  }
+}, 200);
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize());
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize);
+})
 </script>
 
 <template>
   <div class="sample-count-line-chart-container">
-    <VChart class="chart" :option="option" />
+    <el-select
+      v-model="selectedDays"
+      @change="$emit('days-change', selectedDays)"
+    >
+      <el-option
+          v-for="(item, index) in dayOption"
+          :value="item.value"
+          :label="item.label"
+          :key="item.value"
+      />
+    </el-select>
+    <VChart
+        class="chart"
+        :option="option"
+        ref="chartRef"
+        autoresize
+    />
   </div>
 </template>
 

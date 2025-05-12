@@ -19,9 +19,10 @@ import {
   computed,
   reactive,
   ref,
-  defineProps, onMounted, watch, toRef
+  defineProps, onMounted, watch, toRef, onUnmounted
 } from 'vue';
 import {ElMessage} from "element-plus";
+import {debounce} from "lodash-es";
 
 use([
   SVGRenderer,
@@ -31,6 +32,14 @@ use([
   TitleComponent,
   LegendComponent
 ]);
+
+const chartRef = ref(null); // 添加chart引用
+
+const handleResize = debounce(() => {
+  if (chartRef.value && chartRef.value.resize) {
+    chartRef.value.resize();
+  }
+}, 200);
 
 const sampleCountChartProps = defineProps({
   sampleData: {
@@ -128,11 +137,24 @@ const sampleCountChartData = reactive({
   }
 });
 
+onMounted(() => {
+  window.addEventListener('resize', handleResize());
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize);
+});
+
 </script>
 
 <template>
   <div class="sample-count-chart-container">
-    <VChart class="chart" :option="sampleCountChartData.option"/>
+    <VChart
+        class="chart"
+        :option="sampleCountChartData.option"
+        :ref="chartRef"
+        autoresize
+    />
   </div>
 </template>
 

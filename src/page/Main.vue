@@ -48,12 +48,15 @@ async function getPieDataset() {
   total.value = sampleCountChartData.value.reduce((sum, item) => sum + item.value, 0);
 }
 
-async function getLineDataset() {
+async function getLineDataset(days) {
   const response = await apiClient(
       FETCH_CHART_LINE_DATASET_URL,
       {
-        data: {
-          days: 10
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        params: {
+          days: days
         },
         method: 'get',
       }
@@ -67,8 +70,11 @@ async function getLineDataset() {
   counts.value = response.data.data.map(item => {
     return item.total;
   });
+}
 
-  // console.log(response);
+function onDaysChange(curDays) {
+  console.log(curDays);
+  getLineDataset(curDays);
 }
 
 onMounted(() => {
@@ -76,10 +82,8 @@ onMounted(() => {
   getPieDataset();
 
   // 获取样本折线图数据
-  getLineDataset();
+  getLineDataset(30);
 });
-
-
 
 </script>
 
@@ -95,6 +99,7 @@ onMounted(() => {
         class="main-page-sample-upload-history-chart"
         :dates="date"
         :counts="counts"
+        @days-change="onDaysChange"
     ></SampleUploadHistoryChart>
   </div>
 </template>
