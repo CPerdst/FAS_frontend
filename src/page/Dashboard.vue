@@ -25,6 +25,7 @@ import SettingTable from "../components/v1/SettingTable.vue";
 import Footer from "../components/v1/Footer.vue";
 import JsonVIew from "../components/v1/tool/JsonVIew.vue";
 import {addPropsToJsonPanel, removePropsFromJsonPanel} from "../utils/common_utils";
+import ManagementAside from "../components/v1/management/ManagementAside.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -118,7 +119,10 @@ function getBreadcrumbPath(path) {
     <el-container class="main-container"
                   :style="{height: `${shellHeight}px`}"
     >
-      <template v-if="route.path !== '/dashboard/login' && route.path !== '/dashboard/register'">
+      <template v-if="route.path.startsWith('/dashboard/management')">
+        <ManagementAside />
+      </template>
+      <template v-else-if="route.path !== '/dashboard/login' && route.path !== '/dashboard/register'">
         <Aside
             :panel-menu="constants.panelMenu"
             :router="true"

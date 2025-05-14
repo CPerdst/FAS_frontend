@@ -6,6 +6,8 @@
   margin: 0 40px;
   transition: all 0.3s ease;
   height: auto;
+  position: relative;
+
   &:hover {
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
     transform: translateY(-2px);
@@ -83,11 +85,6 @@
       }
     }
 
-    // 箭头图标
-    ::v-deep .el-icon {
-      font-size: 14px;
-      color: #5470c6;
-    }
   }
 
   .chart {

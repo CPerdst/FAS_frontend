@@ -10,6 +10,13 @@ import UserSettings from "../components/dashboard/UserSettings.vue";
 import SampleUpload from '../components/v1/SampleUpload.vue';
 import SampleUploadOld from '../components/dashboard/SampleUpload.vue';
 import Main from '../page/Main.vue';
+import Management from '../page/Management.vue';
+import ManagementHome from "../components/v1/management/ManagementHome.vue";
+import UsersManagement from "../components/v1/management/UsersManagement.vue";
+import RolesManagement from "../components/v1/management/RolesManagement.vue";
+import PermissionsManagement from "../components/v1/management/PermissionsManagement.vue";
+import SamplesManagement from "../components/v1/management/SamplesManagement.vue";
+import ReportsManagement from "../components/v1/management/ReportsManagement.vue";
 
 /**
 
@@ -93,27 +100,27 @@ const routes = [
             },
             {
                 path: 'main',
-                name: 'main',
+                name: 'dashboardMain',
                 component: Main,
-                meta: {requiresAuth: true},
+                meta: {userPage: true},
             },
             {
                 path: 'sampleUpload',
                 name: 'sampleUpload',
                 component: SampleUpload,
-                meta: {requiresAuth: true},
+                meta: {userPage: true},
             },
             {
                 path: 'reportView',
                 name: 'reportView',
                 component: SampleReportView,
-                meta: {requiresAuth: true},
+                meta: {userPage: true},
             },
             {
                 path: 'userSettings',
                 name: 'userSettings',
                 component: UserSettings,
-                meta: {requiresAuth: true},
+                meta: {userPage: true},
             },
             {
                 path: 'login',
@@ -127,6 +134,55 @@ const routes = [
                 component: Register,
                 meta: {guestOnly: true},
             },
+            {
+                path: 'management',
+                name: 'management',
+                component: Management,
+                meta: {adminPage: true},
+                children: [
+                    {
+                        path: '',
+                        name: 'managementEmpty',
+                        redirect: '/dashboard/management/main',
+                    },
+                    {
+                        path: 'main',
+                        name: 'managementMain',
+                        component: ManagementHome,
+                        meta: {adminPage: true},
+                    },
+                    {
+                        path: 'users',
+                        name: 'users',
+                        component: UsersManagement,
+                        meta: {adminPage: true},
+                    },
+                    {
+                        path: 'roles',
+                        name: 'roles',
+                        component: RolesManagement,
+                        meta: {adminPage: true},
+                    },
+                    {
+                        path: 'permissions',
+                        name: 'permissions',
+                        component: PermissionsManagement,
+                        meta: {adminPage: true},
+                    },
+                    {
+                        path: 'samples',
+                        name: 'samples',
+                        component: SamplesManagement,
+                        meta: {adminPage: true},
+                    },
+                    {
+                        path: 'reports',
+                        name: 'reports',
+                        component: ReportsManagement,
+                        meta: {adminPage: true},
+                    }
+                ]
+            }
         ],
 
     },
@@ -166,7 +222,7 @@ router.beforeEach(async (to, from, next) => {
     // }
 
     // 如果页面需要登录
-    if(to.matched.some(record => record.meta.requiresAuth)){
+    if(to.matched.some(record => record.meta.userPage)){
         // console.log(JSON.stringify(to, null, 2));
         // console.log(JSON.stringify(from, null, 2));
         // console.log(next);
@@ -179,18 +235,48 @@ router.beforeEach(async (to, from, next) => {
                 path: '/dashboard/login',
                 query: { redirect: to.fullPath }
             });
+        } else if (auth.isAdmin) {
+            // 如果是管理员跳转到用户页面，重定向到管理员页面
+            next({
+                path: '/dashboard/management',
+            });
         } else {
-            // 正常跳转
+            // 普通用户跳转到普通用户页面，直接放行
             next();
         }
-    }else if(to.matched.some(record => record.meta.guestOnly)){
+    } else if (to.matched.some(record => record.meta.adminPage)) {
+        if (!auth.isLoggedIn) {
+            next({
+                path: '/dashboard/login',
+                query: { redirect: to.fullPath }
+            });
+        } else if (!auth.isAdmin) {
+            // 普通用户跳转到管理员页面
+            next({
+                path: '/dashboard/main',
+            });
+        } else {
+            // 管理员跳转到管理员页面，直接放行
+            next();
+        }
+    }
+    else if(to.matched.some(record => record.meta.guestOnly)){
         // 如果页面不需要登陆
         if (auth.isLoggedIn) {
-            next('/dashboard');
+            // 如果用户登录了
+            if(auth.isAdmin) {
+                // 如果用户是管理员
+                next({
+                    path: '/dashboard/management',
+                });
+            } else {
+                // 如果是普通用户
+                next('/dashboard/main');
+            }
         }else {
             next();
         }
-    }else {
+    } else {
         // 其他的路由直接放行
         next();
     }

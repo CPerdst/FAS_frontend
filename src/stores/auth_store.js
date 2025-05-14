@@ -14,6 +14,7 @@ export const auth_store = defineStore("auth_store", {
         getUserInfo: state => state.user,
         getToken: state => state.token,
         isLoggedIn: state => state.token !== undefined && state.token !== null,
+        isAdmin: state => state.user?.roles.some(role => role.name === "admin"),
     },
     computed: {
         getUserInfo: function () {
@@ -25,6 +26,9 @@ export const auth_store = defineStore("auth_store", {
         isLoggedIn: function () {
             return this.token !== undefined && this.token !== null;
         },
+        isAdmin: function () {
+            return this.user?.roles.some(role => role.name === "admin");
+        }
     },
     actions: {
         logout() {
