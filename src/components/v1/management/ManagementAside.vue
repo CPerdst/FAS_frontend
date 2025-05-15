@@ -30,7 +30,7 @@
           <span>数据管理</span>
         </template>
         <el-menu-item index="/dashboard/management/samples">样本列表</el-menu-item>
-        <el-menu-item index="/dashboard/management/reports">报告列表</el-menu-item>
+        <!-- <el-menu-item index="/dashboard/management/reports">报告列表</el-menu-item> -->
       </el-sub-menu>
     </el-menu>
   </el-aside>

@@ -222,7 +222,7 @@ onUnmounted(() => {
               <el-icon :size="60" class="upload-icon"><upload-filled /></el-icon>
               <div class="upload-text">
                 <p class="main-text">点击或将文件拖入此区域</p>
-                <p class="sub-text">支持所有格式文件，单文件不超过50MB</p>
+                <p class="sub-text">支持所有格式文件，单文件不超过20MB</p>
               </div>
             </div>
           </template>

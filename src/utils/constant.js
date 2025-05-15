@@ -51,7 +51,11 @@ export const SAMPLE_UPLOAD_URL = import.meta.env.VITE_BASE_URL + '/api/file/samp
 
 export const FETCH_SAMPLE_URL = import.meta.env.VITE_BASE_URL + '/api/sample/list';
 
+export const FETCH_ADMIN_SAMPLE_URL = import.meta.env.VITE_BASE_URL + '/api/sample/admin/list';
+
 export const FETCH_SAMPLE_REPORT_URL = import.meta.env.VITE_BASE_URL + '/api/report/list';
+
+export const DELETE_SAMPLE_URL = import.meta.env.VITE_BASE_URL + '/api/sample/delete';
 
 export const FETCH_CHART_DATASET_URL = import.meta.env.VITE_BASE_URL + '/api/sample/allHistory';
 
