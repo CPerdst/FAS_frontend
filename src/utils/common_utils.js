@@ -73,10 +73,14 @@ export function getDatetimeByArrayTimeFormat (arrayTime) {
     const day = arrayTime[2];
     const hour = arrayTime[3];
     const minute = arrayTime[4];
-    const second = arrayTime[5];
-    const date = new Date(year, month - 1, day, hour, minute, second);
-    console.log(date.toLocaleString());
-    return date.toLocaleString();
+    if(arrayTime.length === 6) {
+        const second = arrayTime[5];
+        const date = new Date(year, month - 1, day, hour, minute, second === null ? 0 : second);
+        return date.toLocaleString();
+    } else {
+        const date = new Date(year, month - 1, day, hour, minute, 0);
+        return date.toLocaleString();
+    }
 }
 
 export function getFormatedDate(date) {

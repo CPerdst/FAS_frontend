@@ -2,41 +2,26 @@
   <div class="management-home">
     <el-row :gutter="20">
       <el-col :span="8">
-        <el-card shadow="hover">
+        <el-card>
           <div class="stat-card">
-            <div class="stat-icon">
-              <el-icon><User /></el-icon>
-            </div>
-            <div class="stat-content">
-              <div class="stat-title">用户总数</div>
-              <div class="stat-value">{{ userCount }}</div>
-            </div>
+            <div class="stat-title">用户总数</div>
+            <div class="stat-value">{{ userCount }}</div>
           </div>
         </el-card>
       </el-col>
       <el-col :span="8">
-        <el-card shadow="hover">
+        <el-card>
           <div class="stat-card">
-            <div class="stat-icon">
-              <el-icon><DataAnalysis /></el-icon>
-            </div>
-            <div class="stat-content">
-              <div class="stat-title">样本总数</div>
-              <div class="stat-value">{{ sampleCount }}</div>
-            </div>
+            <div class="stat-title">样本总数</div>
+            <div class="stat-value">{{ sampleCount }}</div>
           </div>
         </el-card>
       </el-col>
       <el-col :span="8">
-        <el-card shadow="hover">
+        <el-card>
           <div class="stat-card">
-            <div class="stat-icon">
-              <el-icon><Document /></el-icon>
-            </div>
-            <div class="stat-content">
-              <div class="stat-title">报告总数</div>
-              <div class="stat-value">{{ reportCount }}</div>
-            </div>
+            <div class="stat-title">报告总数</div>
+            <div class="stat-value">{{ reportCount }}</div>
           </div>
         </el-card>
       </el-col>
@@ -45,48 +30,84 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import {
-  User,
-  DataAnalysis,
-  Document
-} from '@element-plus/icons-vue';
+import { ref, onMounted } from 'vue'
+import apiClient from '../../../utils/asiox_instance'
+import { 
+  FETCH_USER_COUNT_URL, FETCH_SAMPLE_COUNT_URL, FETCH_REPORT_COUNT_URL
+} from '../../../utils/constant'
 
-const userCount = ref(0);
-const sampleCount = ref(0);
-const reportCount = ref(0);
+const userCount = ref(0)
+const sampleCount = ref(0)
+const reportCount = ref(0)
 
-// TODO: 从API获取统计数据
+async function fetchCounts() {
+  try {
+    // 获取用户总数
+    const userRes = await apiClient(
+      FETCH_USER_COUNT_URL,
+      {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    if (userRes.data.code === 0) {
+      userCount.value = userRes.data.data
+    }
+
+    // 获取样本总数
+    const sampleRes = await apiClient(
+      FETCH_SAMPLE_COUNT_URL,
+      {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    if (sampleRes.data.code === 0) {
+      sampleCount.value = sampleRes.data.data
+    }
+
+    // 获取报告总数
+    const reportRes = await apiClient(
+      FETCH_REPORT_COUNT_URL,
+      {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+    if (reportRes.data.code === 0) {
+      reportCount.value = reportRes.data.data
+    }
+  } catch (error) {
+    console.error('获取统计数据失败:', error)
+  }
+}
+
+onMounted(() => {
+  fetchCounts()
+})
 </script>
 
 <style scoped>
 .management-home {
   padding: 20px;
 }
-
 .stat-card {
-  display: flex;
-  align-items: center;
+  text-align: center;
+  padding: 20px;
 }
-
-.stat-icon {
-  font-size: 24px;
-  margin-right: 16px;
-  color: var(--el-color-primary);
-}
-
-.stat-content {
-  flex: 1;
-}
-
 .stat-title {
-  font-size: 14px;
-  color: var(--el-text-color-secondary);
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 10px;
 }
-
 .stat-value {
   font-size: 24px;
   font-weight: bold;
-  margin-top: 8px;
 }
 </style>

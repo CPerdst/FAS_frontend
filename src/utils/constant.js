@@ -57,6 +57,34 @@ export const FETCH_CHART_DATASET_URL = import.meta.env.VITE_BASE_URL + '/api/sam
 
 export const FETCH_CHART_LINE_DATASET_URL = import.meta.env.VITE_BASE_URL + '/api/sample/lineHistory';
 
+export const FETCH_USER_COUNT_URL = import.meta.env.VITE_BASE_URL + '/api/user/count';
+
+export const FETCH_SAMPLE_COUNT_URL = import.meta.env.VITE_BASE_URL + '/api/sample/totalCount';
+
+export const FETCH_REPORT_COUNT_URL = import.meta.env.VITE_BASE_URL + '/api/sample/reportCount';
+
+export const FETCH_ALL_USERS_URL = import.meta.env.VITE_BASE_URL + '/api/user/list';
+
+export const ADD_USER_URL = import.meta.env.VITE_BASE_URL + '/api/user/add';
+
+export const DELETE_USER_URL = import.meta.env.VITE_BASE_URL + '/api/user/delete';
+
+export const FETCH_ALL_ROLES_URL = import.meta.env.VITE_BASE_URL + '/api/role/list';
+
+export const ADD_ROLE_URL = import.meta.env.VITE_BASE_URL + '/api/role/add';
+
+export const UPDATE_ROLE_URL = import.meta.env.VITE_BASE_URL + '/api/role/update';
+
+export const DELETE_ROLE_URL = import.meta.env.VITE_BASE_URL + '/api/role/delete';
+
+export const FETCH_ALL_PERMISSIONS_URL = import.meta.env.VITE_BASE_URL + '/api/permission/list';
+
+export const ADD_PERMISSION_URL = import.meta.env.VITE_BASE_URL + '/api/permission/add';
+
+export const UPDATE_PERMISSION_URL = import.meta.env.VITE_BASE_URL + '/api/permission/update';
+
+export const DELETE_PERMISSION_URL = import.meta.env.VITE_BASE_URL + '/api/permission/delete';
+
 export const MAX_SAMPLE_SIZE = 1024 * 1024 * 50; // 50MB
 
 // ======================================================================================================================
