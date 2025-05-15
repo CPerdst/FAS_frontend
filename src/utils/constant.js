@@ -215,6 +215,7 @@ export const panelMenu = [
     {
         name: 'main',
         title: '首页',
+        purpose: 'user',
         path: MAIN_PANEL_URL,
         icon: House,
     },
@@ -222,6 +223,7 @@ export const panelMenu = [
         name: 'virusDetect',
         title: '查杀',
         icon: MostlyCloudy,
+        purpose: 'user',
         submenu: [
             {
                 name: 'sampleUpload',
@@ -240,11 +242,13 @@ export const panelMenu = [
     {
         name: 'management',
         title: '管理首页',
+        purpose: 'admin',
         path: MANAGEMENT_PANEL_URL,
     },
     {
         name: 'users-management',
         title: '用户管理',
+        purpose: 'admin',
         submenu: [
             {
                 name: 'users',
@@ -266,6 +270,7 @@ export const panelMenu = [
     {
         name: 'data-management',
         title: '数据管理',
+        purpose: 'admin',
         submenu: [
             {
                 name: 'samples',

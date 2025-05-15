@@ -63,7 +63,8 @@ const route = useRoute();
     >
       <template v-if="route.path !== '/dashboard/setting'">
         <template v-for="(item, index) in props.panelMenu" :key="index">
-          <el-sub-menu v-if="item.submenu" :index="item.path">
+          <template v-if="item.purpose === 'user'">
+            <el-sub-menu v-if="item.submenu" :index="item.path">
             <template #title>
               <el-icon v-if="item.icon" :size="18">
                 <component :is="item.icon" />
@@ -89,6 +90,7 @@ const route = useRoute();
               {{item.title}}
             </template>
           </el-menu-item>
+          </template>
         </template>
       </template>
 
