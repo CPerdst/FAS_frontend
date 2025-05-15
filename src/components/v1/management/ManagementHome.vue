@@ -26,6 +26,16 @@
         </el-card>
       </el-col>
     </el-row>
+    
+    <!-- 用户历史图表 -->
+    <el-row :gutter="20" class="chart-row">
+      <el-col :span="24">
+        <UserHistoryChart 
+          :data="userHistoryData"
+          @days-change="onDaysChange"
+        />
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -33,12 +43,14 @@
 import { ref, onMounted } from 'vue'
 import apiClient from '../../../utils/asiox_instance'
 import { 
-  FETCH_USER_COUNT_URL, FETCH_SAMPLE_COUNT_URL, FETCH_REPORT_COUNT_URL
+  FETCH_USER_COUNT_URL, FETCH_SAMPLE_COUNT_URL, FETCH_REPORT_COUNT_URL, FETCH_USER_LINE_HISTORY_URL
 } from '../../../utils/constant'
+import UserHistoryChart from './chart/UserHistoryChart.vue'
 
 const userCount = ref(0)
 const sampleCount = ref(0)
 const reportCount = ref(0)
+const userHistoryData = ref([])
 
 async function fetchCounts() {
   try {
@@ -88,8 +100,32 @@ async function fetchCounts() {
   }
 }
 
+async function fetchUserHistory(days = 30) {
+  try {
+    const res = await apiClient(
+      FETCH_USER_LINE_HISTORY_URL,
+      {
+        method: 'get',
+        params: {
+          days: days
+        }
+      }
+    )
+    if (res.data.code === 0) {
+      userHistoryData.value = res.data.data
+    }
+  } catch (error) {
+    console.error('获取用户历史数据失败:', error)
+  }
+}
+
+function onDaysChange(days) {
+  fetchUserHistory(days)
+}
+
 onMounted(() => {
   fetchCounts()
+  fetchUserHistory()
 })
 </script>
 
@@ -109,5 +145,8 @@ onMounted(() => {
 .stat-value {
   font-size: 24px;
   font-weight: bold;
+}
+.chart-row {
+  margin-top: 20px;
 }
 </style>

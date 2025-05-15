@@ -65,6 +65,8 @@ export const FETCH_REPORT_COUNT_URL = import.meta.env.VITE_BASE_URL + '/api/samp
 
 export const FETCH_ALL_USERS_URL = import.meta.env.VITE_BASE_URL + '/api/user/list';
 
+export const FETCH_USER_LINE_HISTORY_URL = import.meta.env.VITE_BASE_URL + '/api/user/lineHistory';
+
 export const ADD_USER_URL = import.meta.env.VITE_BASE_URL + '/api/user/add';
 
 export const DELETE_USER_URL = import.meta.env.VITE_BASE_URL + '/api/user/delete';
