@@ -107,25 +107,62 @@ export const LOGIN_PANEL_URL = '/dashboard/login';
  * 注册页路由
  * @type {string}
  */
-export const REGISTER_PANEL_URL = '/dashboard/register'
+export const REGISTER_PANEL_URL = '/dashboard/register';
 
 /**
  * 样本上传页路由
  * @type {string}
  */
-export const SAMPLE_UPLOAD_PANEL_URL = '/dashboard/sampleUpload'
+export const SAMPLE_UPLOAD_PANEL_URL = '/dashboard/sampleUpload';
 
 /**
  * 样本报告查看页路由
  * @type {string}
  */
-export const SAMPLE_REPORT_VIEWING_PANEL_URL = '/dashboard/reportView'
+export const SAMPLE_REPORT_VIEWING_PANEL_URL = '/dashboard/reportView';
 
 /**
  * 设置页路由
  * @type {string}
  */
-export const SETTINGS_PANEL_URL = '/dashboard/setting'
+export const SETTINGS_PANEL_URL = '/dashboard/setting';
+
+/**
+ * 管理页路由
+ * @type {string}
+ */
+export const MANAGEMENT_PANEL_URL = '/dashboard/management';
+
+/**
+ * 用户管理页路由
+ * @type {string}
+ */
+export const USER_MANAGEMENT_PANEL_URL = '/dashboard/management/users';
+
+/**
+ * 角色管理页路由
+ * @type {string}
+ */
+export const ROLE_MANAGEMENT_PANEL_URL = '/dashboard/management/roles';
+
+/**
+ * 权限管理页路由
+ * @type {string}
+ */
+export const PERMISSION_MANAGEMENT_PANEL_URL = '/dashboard/management/permissions';
+
+/**
+ * 样本管理页路由
+ * @type {string}
+ */
+export const SAMPLE_MANAGEMENT_PANEL_URL = '/dashboard/management/samples';
+
+/**
+ * 报告管理页路由
+ * @type {string}
+ */
+export const REPORT_MANAGEMENT_PANEL_URL = '/dashboard/management/reports';
+
 
 // ======================================================================================================================
 // 接口路由
@@ -191,6 +228,48 @@ export const panelMenu = [
                 title: '报告查看',
                 path: SAMPLE_REPORT_VIEWING_PANEL_URL,
                 icon: Document
+            }
+        ]
+    },
+    {
+        name: 'management',
+        title: '管理首页',
+        path: MANAGEMENT_PANEL_URL,
+    },
+    {
+        name: 'users-management',
+        title: '用户管理',
+        submenu: [
+            {
+                name: 'users',
+                title: '用户列表',
+                path: USER_MANAGEMENT_PANEL_URL,
+            },
+            {
+                name: 'roles',
+                title: '角色列表',
+                path: ROLE_MANAGEMENT_PANEL_URL,
+            },
+            {
+                name: 'permissions',
+                title: '权限列表',
+                path: PERMISSION_MANAGEMENT_PANEL_URL,
+            }
+        ]
+    },
+    {
+        name: 'data-management',
+        title: '数据管理',
+        submenu: [
+            {
+                name: 'samples',
+                title: '样本列表',
+                path: SAMPLE_MANAGEMENT_PANEL_URL,
+            },
+            {
+                name: 'reports',
+                title: '报告列表',
+                path: REPORT_MANAGEMENT_PANEL_URL,
             }
         ]
     }

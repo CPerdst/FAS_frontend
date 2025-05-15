@@ -20,8 +20,8 @@
           <span>用户管理</span>
         </template>
         <el-menu-item index="/dashboard/management/users">用户列表</el-menu-item>
-        <el-menu-item index="/dashboard/management/roles">角色管理</el-menu-item>
-        <el-menu-item index="/dashboard/management/permissions">权限管理</el-menu-item>
+        <el-menu-item index="/dashboard/management/roles">角色列表</el-menu-item>
+        <el-menu-item index="/dashboard/management/permissions">权限列表</el-menu-item>
       </el-sub-menu>
 
       <el-sub-menu index="data-management">
@@ -29,8 +29,8 @@
           <el-icon><DataBoard /></el-icon>
           <span>数据管理</span>
         </template>
-        <el-menu-item index="/dashboard/management/samples">样本管理</el-menu-item>
-        <el-menu-item index="/dashboard/management/reports">报告管理</el-menu-item>
+        <el-menu-item index="/dashboard/management/samples">样本列表</el-menu-item>
+        <el-menu-item index="/dashboard/management/reports">报告列表</el-menu-item>
       </el-sub-menu>
     </el-menu>
   </el-aside>
