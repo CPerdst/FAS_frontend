@@ -2,10 +2,13 @@ import axios from "axios";
 import {auth_store} from "../stores/auth_store";
 import router from "../routers/main_router";
 import {useRoute} from "vue-router";
+import {HTTP_BASE_PATH} from "./constant";
 
 const apiClient = axios.create({
-    baseURL: import.meta.env.VITE_BASE_URL
+    baseURL: HTTP_BASE_PATH
 });
+
+console.log(HTTP_BASE_PATH)
 
 apiClient.interceptors.request.use(config => {
     const auth = auth_store()
@@ -17,9 +20,9 @@ apiClient.interceptors.request.use(config => {
 });
 
 apiClient.interceptors.response.use(response => {
-        const new_token = response.headers['new-token'];
+        const new_token = response.headers['New-Token'];
         if(new_token) {
-            console.log("new_token", new_token);
+            console.log("New_Token", new_token);
             const auth = auth_store()
             // 更新auth中的token
             auth.$patch({

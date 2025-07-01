@@ -35,6 +35,10 @@ export const AUTHOR = 'l1Akr';
  */
 export const AUTHOR_GITHUB = 'https://github.com/CPerdst/FAS_frontend';
 
+export const HTTP_BASE_PATH = `http://${import.meta.env.VITE_HOST}:${import.meta.env.VITE_PORT}`;
+
+export const WS_BASE_PATH = `ws://${import.meta.env.VITE_HOST}:${import.meta.env.VITE_PORT}`;
+
 export const fast_timeout = 3000 // 三秒
 
 export const middle_timeout = 5000 // 五秒
@@ -90,6 +94,8 @@ export const ADD_PERMISSION_URL = import.meta.env.VITE_BASE_URL + '/api/permissi
 export const UPDATE_PERMISSION_URL = import.meta.env.VITE_BASE_URL + '/api/permission/update';
 
 export const DELETE_PERMISSION_URL = import.meta.env.VITE_BASE_URL + '/api/permission/delete';
+
+export const WS_SAMPLE_STATUS_URL = WS_BASE_PATH + '/ws/sampleStatus';
 
 export const MAX_SAMPLE_SIZE = 1024 * 1024 * 50; // 50MB
 
@@ -535,7 +541,7 @@ export const TABLE_SHOWN_COLUMNS = [
                 {
                     style: 'display: flex; align-items: center;  justify-content: center;'
                 },
-                row.date
+                row.createTime
             )
         }
     },
@@ -742,3 +748,8 @@ export const SAMPLE_REPORT_VIEW_REACTIVE_PROPS = reactive({
     sampleReportTableProps: SAMPLE_REPORT_TABLE_PROPS,
     sampleReportFooterProps: SAMPLE_REPORT_FOOTER_PROPS
 });
+
+/**
+ * heartbeat interval timeout 30 second
+ */
+export const WS_HEARTBEAT_INTERVAL = 30000

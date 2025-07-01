@@ -13,12 +13,18 @@ export default defineConfig(({ command, mode }) => {
             port: env.VITE_PORT,
             proxy: {
                 '/api': {
-                    target: env.VITE_BACKEND_BASE_URL,
+                    target: `http://${env.VITE_BACKEND_HOST}:${env.VITE_BACKEND_PORT}`,
                     changeOrigin: true,
                     secure: false,
                     rewrite: (path) => {
                         return path.replace(/^\/api/, '')
                     },
+                },
+                '/ws': {
+                    target: `http://${env.VITE_BACKEND_HOST}:${env.VITE_BACKEND_PORT}`,
+                    changeOrigin: true,
+                    secure: false,
+                    ws: true,
                 }
             }
         },

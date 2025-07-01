@@ -21,10 +21,12 @@ import {
   MAX_SAMPLE_SIZE,
   SAMPLE_UPLOAD_FORM_PROPS,
   SAMPLE_UPLOAD_URL,
-  TABLE_SHOWN_COLUMNS
+  TABLE_SHOWN_COLUMNS, WS_BASE_PATH, WS_SAMPLE_STATUS_URL
 } from "../../utils/constant";
 import apiClient from "../../utils/asiox_instance";
 import {ElNotification} from "element-plus";
+import {auth_store} from "../../stores/auth_store";
+import {useSampleStore} from "../../stores/sample_store";
 
 const sampleUploadData = reactive({
   fileList: [],
@@ -38,8 +40,11 @@ const sampleUploadData = reactive({
     pageSize: 10,
     total: 0
   },
-  intervalId: null
+  intervalId: null,
+  ws: null
 });
+
+const sampleStore = useSampleStore();
 
 function beforeUpload(rawFile) {
   if (rawFile.size > MAX_SAMPLE_SIZE) {
@@ -180,28 +185,42 @@ async function fetchSampleList() {
 }
 
 function handleSizeChange(newSize) {
-  sampleUploadData.pagination.pageSize = newSize;
-  sampleUploadData.pagination.pageNum = 1; // 必须重置页码
-  fetchSampleList();
+  // sampleUploadData.pagination.pageSize = newSize;
+  // sampleUploadData.pagination.pageNum = 1; // 必须重置页码
+  // fetchSampleList();
+
+  sampleStore.pagination.pageSize = newSize;
+  sampleStore.pagination.page = 1 // 重置页码
+  sampleStore.fetchSamples()
+
 }
 
 onMounted(() => {
+  // 获取一下记录
+  useSampleStore().fetchSamples()
+
   // 获取样本提交历史记录
-  fetchSampleList()
+  // fetchSampleList()
+
+  // 测试链接websocket
+  // setupWebSocket()
 
   // 添加样本上传数据到json面板
-  addPropsToJsonPanel('sampleUploadData', computed(() => sampleUploadData));
+  // addPropsToJsonPanel('sampleUploadData', computed(() => sampleUploadData));
 
   // 设置定时每5秒执行一次fetch, 进行比对替换
-  sampleUploadData.intervalId = setInterval(() => {
-    // 获取样本提交历史记录
-    fetchSampleList()
-  }, 5000);
+  // sampleUploadData.intervalId = setInterval(() => {
+  //   // 获取样本提交历史记录
+  //   fetchSampleList()
+  // }, 5000);
 });
 
 onUnmounted(() => {
   // 移除定时器
   clearInterval(sampleUploadData.intervalId);
+
+  // 关闭WebSocket
+  // sampleUploadData.ws.close()
 });
 
 </script>
@@ -265,8 +284,8 @@ onUnmounted(() => {
         </el-select>
       </div>
       <el-table
-          v-loading="sampleUploadData.loading"
-          :data="sampleUploadData.sampleList"
+          v-loading="useSampleStore().loading"
+          :data="useSampleStore().getSampleList"
           border
           style="width: 100%"
           :row-key="row => row.id"
@@ -283,10 +302,10 @@ onUnmounted(() => {
           background
           layout="prev, pager, next, sizes, total"
           :page-sizes="[10, 20, 50, 100]"
-          :total="sampleUploadData.pagination.total"
-          v-model:current-page="sampleUploadData.pagination.pageNum"
-          v-model:page-size="sampleUploadData.pagination.pageSize"
-          @current-change="fetchSampleList"
+          :total="sampleStore.pagination.total"
+          v-model:current-page="sampleStore.pagination.page"
+          v-model:page-size="sampleStore.pagination.pageSize"
+          @current-change="sampleStore.fetchSamples()"
           @size-change="handleSizeChange"
       />
     </el-card>

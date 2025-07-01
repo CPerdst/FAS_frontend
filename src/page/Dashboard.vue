@@ -26,6 +26,7 @@ import Footer from "../components/v1/Footer.vue";
 import JsonVIew from "../components/v1/tool/JsonVIew.vue";
 import {addPropsToJsonPanel, removePropsFromJsonPanel} from "../utils/common_utils";
 import ManagementAside from "../components/v1/management/ManagementAside.vue";
+import {useSampleStore} from "../stores/sample_store";
 
 const router = useRouter();
 const route = useRoute();
@@ -67,10 +68,16 @@ onMounted(() => {
   const headerHeightNum = parseFloat(HEADER_HEIGHT);
   shellHeight.value = window.innerHeight - headerHeightNum;
 
+  // 初始化WebSocket监听样本状态
+  const sampleStore = useSampleStore()
+  // 建立ws连接并获取samples
+  sampleStore.connectWebSocket()
+  sampleStore.fetchSamples()
+
   // 添加用户信息监视
-  addPropsToJsonPanel('user', computed(() => {return auth_store().user;}));
-  addPropsToJsonPanel('token', computed(() => {return auth_store().token;}));
-  addPropsToJsonPanel('redirectPath', computed(() => {return auth_store().redirectPath;}));
+  // addPropsToJsonPanel('user', computed(() => {return auth_store().user;}));
+  // addPropsToJsonPanel('token', computed(() => {return auth_store().token;}));
+  // addPropsToJsonPanel('redirectPath', computed(() => {return auth_store().redirectPath;}));
 });
 
 /**
