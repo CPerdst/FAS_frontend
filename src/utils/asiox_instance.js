@@ -8,8 +8,6 @@ const apiClient = axios.create({
     baseURL: HTTP_BASE_PATH
 });
 
-console.log(HTTP_BASE_PATH)
-
 apiClient.interceptors.request.use(config => {
     const auth = auth_store()
     const token = auth.token

@@ -6,7 +6,7 @@ import * as constants from '../utils/constant';
 import Aside from "../components/v1/Aside.vue";
 
 import {
-  computed, onMounted, ref
+  computed, onMounted, onUnmounted, ref
 } from "vue";
 
 import {
@@ -79,6 +79,10 @@ onMounted(() => {
   // addPropsToJsonPanel('token', computed(() => {return auth_store().token;}));
   // addPropsToJsonPanel('redirectPath', computed(() => {return auth_store().redirectPath;}));
 });
+
+onUnmounted(() => {
+
+})
 
 /**
  * 根据路由获取标题
